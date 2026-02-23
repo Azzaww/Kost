@@ -1,0 +1,214 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Projek UPK\\Kost_SiguraGura\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|D:\\Projek UPK\\Kost_SiguraGura\\kost_siguragura\\datakamar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|solutionrelative:kost_siguragura\\datakamar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|D:\\Projek UPK\\Kost_SiguraGura\\kost_siguragura\\datapenyewa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|solutionrelative:kost_siguragura\\datapenyewa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|d:\\projek upk\\kost_siguragura\\kost_siguragura\\sidebar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|solutionrelative:kost_siguragura\\sidebar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|D:\\Projek UPK\\Kost_SiguraGura\\kost_siguragura\\berandapage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|solutionrelative:kost_siguragura\\berandapage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|D:\\Projek UPK\\Kost_SiguraGura\\kost_siguragura\\pembayaran.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|solutionrelative:kost_siguragura\\pembayaran.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|D:\\Projek UPK\\Kost_SiguraGura\\kost_siguragura\\sidebar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|solutionrelative:kost_siguragura\\sidebar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|D:\\Projek UPK\\Kost_SiguraGura\\kost_siguragura\\datakamar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|solutionrelative:kost_siguragura\\datakamar.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|D:\\Projek UPK\\Kost_SiguraGura\\kost_siguragura\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|solutionrelative:kost_siguragura\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|D:\\Projek UPK\\Kost_SiguraGura\\kost_siguragura\\berandapage.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|solutionrelative:kost_siguragura\\berandapage.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|D:\\Projek UPK\\Kost_SiguraGura\\kost_siguragura\\berandapage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|solutionrelative:kost_siguragura\\berandapage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|D:\\Projek UPK\\Kost_SiguraGura\\kost_siguragura\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|solutionrelative:kost_siguragura\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|D:\\Projek UPK\\Kost_SiguraGura\\kost_siguragura\\sidebar.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C234306C-0752-4C15-BBED-152051293999}|Kost_SiguraGura\\Kost_SiguraGura.csproj|solutionrelative:kost_siguragura\\sidebar.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Pembayaran.cs [Design]",
+              "DocumentMoniker": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\Pembayaran.cs",
+              "RelativeDocumentMoniker": "Kost_SiguraGura\\Pembayaran.cs",
+              "ToolTip": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\Pembayaran.cs [Design]",
+              "RelativeToolTip": "Kost_SiguraGura\\Pembayaran.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-11T01:38:08.081Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DataPenyewa.cs [Design]",
+              "DocumentMoniker": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\DataPenyewa.cs",
+              "RelativeDocumentMoniker": "Kost_SiguraGura\\DataPenyewa.cs",
+              "ToolTip": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\DataPenyewa.cs [Design]",
+              "RelativeToolTip": "Kost_SiguraGura\\DataPenyewa.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-11T01:05:18.573Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DataKamar.cs [Design]",
+              "DocumentMoniker": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\DataKamar.cs",
+              "RelativeDocumentMoniker": "Kost_SiguraGura\\DataKamar.cs",
+              "ToolTip": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\DataKamar.cs [Design]",
+              "RelativeToolTip": "Kost_SiguraGura\\DataKamar.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-10T23:25:22.583Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BerandaPage.cs [Design]",
+              "DocumentMoniker": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\BerandaPage.cs",
+              "RelativeDocumentMoniker": "Kost_SiguraGura\\BerandaPage.cs",
+              "ToolTip": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\BerandaPage.cs [Design]",
+              "RelativeToolTip": "Kost_SiguraGura\\BerandaPage.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-10T03:01:33.156Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Sidebar.cs [Design]",
+              "DocumentMoniker": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\Sidebar.cs",
+              "RelativeDocumentMoniker": "Kost_SiguraGura\\Sidebar.cs",
+              "ToolTip": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\Sidebar.cs [Design]",
+              "RelativeToolTip": "Kost_SiguraGura\\Sidebar.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T23:56:03.705Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Sidebar.cs",
+              "DocumentMoniker": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\Sidebar.cs",
+              "RelativeDocumentMoniker": "Kost_SiguraGura\\Sidebar.cs",
+              "ToolTip": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\Sidebar.cs",
+              "RelativeToolTip": "Kost_SiguraGura\\Sidebar.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAAADAAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-10T00:50:47.742Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "BerandaPage.Designer.cs",
+              "DocumentMoniker": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\BerandaPage.Designer.cs",
+              "RelativeDocumentMoniker": "Kost_SiguraGura\\BerandaPage.Designer.cs",
+              "ToolTip": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\BerandaPage.Designer.cs",
+              "RelativeToolTip": "Kost_SiguraGura\\BerandaPage.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAKUBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-10T03:41:58.683Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "DataKamar.cs",
+              "DocumentMoniker": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\DataKamar.cs",
+              "RelativeDocumentMoniker": "Kost_SiguraGura\\DataKamar.cs",
+              "ToolTip": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\DataKamar.cs",
+              "RelativeToolTip": "Kost_SiguraGura\\DataKamar.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-11T00:05:38.795Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Form1.cs [Design]",
+              "DocumentMoniker": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\Form1.cs",
+              "RelativeDocumentMoniker": "Kost_SiguraGura\\Form1.cs",
+              "ToolTip": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\Form1.cs [Design]",
+              "RelativeToolTip": "Kost_SiguraGura\\Form1.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T07:38:22.694Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\Form1.cs",
+              "RelativeDocumentMoniker": "Kost_SiguraGura\\Form1.cs",
+              "ToolTip": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\Form1.cs",
+              "RelativeToolTip": "Kost_SiguraGura\\Form1.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAMwCUAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T07:45:48.681Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "BerandaPage.cs",
+              "DocumentMoniker": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\BerandaPage.cs",
+              "RelativeDocumentMoniker": "Kost_SiguraGura\\BerandaPage.cs",
+              "ToolTip": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\BerandaPage.cs",
+              "RelativeToolTip": "Kost_SiguraGura\\BerandaPage.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAnwBgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-10T04:29:58.429Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Sidebar.Designer.cs",
+              "DocumentMoniker": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\Sidebar.Designer.cs",
+              "RelativeDocumentMoniker": "Kost_SiguraGura\\Sidebar.Designer.cs",
+              "ToolTip": "D:\\Projek UPK\\Kost_SiguraGura\\Kost_SiguraGura\\Sidebar.Designer.cs",
+              "RelativeToolTip": "Kost_SiguraGura\\Sidebar.Designer.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAYwDoAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-10T00:42:08.571Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
