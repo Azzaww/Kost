@@ -1,0 +1,278 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Kost_RahmatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Gallery">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="title" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="category" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="image_url" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="update_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="deleted_at" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="Kamar">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nomor_kamar" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="tipe_kamar" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="fasilitas" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="harga_per_bulan" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="status" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="capacity" Type="Int32" Nullable="false" />
+    <Property Name="floor" Type="Int32" Nullable="false" />
+    <Property Name="size" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="bedrooms" Type="Int32" Nullable="false" />
+    <Property Name="bathrooms" Type="Int32" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="image_url" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="update_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="deleted_at" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Pemesanan" Relationship="Self.pemesanan_kamar_id_foreign" FromRole="Kamar" ToRole="Pemesanan" />
+    <NavigationProperty Name="Review" Relationship="Self.review_kamar_id_foreign" FromRole="Kamar" ToRole="Review" />
+  </EntityType>
+  <EntityType Name="Laporan">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="periode" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="total_pemasukan" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="jumlah_penghuni_aktif" Type="Int32" Nullable="false" />
+    <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="update_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="deleted_at" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="PaymentReminder">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="pembayaran_id" Type="Int64" Nullable="false" />
+    <Property Name="jumlah_bayar" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="tanggal_reminder" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="status_reminder" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="is_sent" Type="Boolean" Nullable="false" />
+    <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="update_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="deleted_at" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Pembayaran" Relationship="Self.paymentreminder_pembayaran_id_foreign" FromRole="PaymentReminder" ToRole="Pembayaran" />
+  </EntityType>
+  <EntityType Name="Pembayaran">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="pemesanan_id" Type="Int64" Nullable="false" />
+    <Property Name="jumlah_bayar" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="tanggal_bayar" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="bukti_transfer" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="status_pembayaran" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="order_id" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="snap_token" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="metode_pembyaran" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="tipe_pembayaran" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="jumlah_dp" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="tanggal_jatuh_tempo" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="update_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="deleted_at" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="PaymentReminder" Relationship="Self.paymentreminder_pembayaran_id_foreign" FromRole="Pembayaran" ToRole="PaymentReminder" />
+    <NavigationProperty Name="Pemesanan" Relationship="Self.pembayaran_pemesanan_id_foreign" FromRole="Pembayaran" ToRole="Pemesanan" />
+  </EntityType>
+  <EntityType Name="Pemesanan">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="penyewa_id" Type="Int64" Nullable="false" />
+    <Property Name="kamar_id" Type="Int64" Nullable="false" />
+    <Property Name="tanggal_mulai" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="durasi_sewa" Type="Int32" Nullable="false" />
+    <Property Name="status_pemesanan" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="update_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="deleted_at" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Kamar" Relationship="Self.pemesanan_kamar_id_foreign" FromRole="Pemesanan" ToRole="Kamar" />
+    <NavigationProperty Name="Pembayaran" Relationship="Self.pembayaran_pemesanan_id_foreign" FromRole="Pemesanan" ToRole="Pembayaran" />
+    <NavigationProperty Name="Penyewa" Relationship="Self.pemesanan_penyewa_id_foreign" FromRole="Pemesanan" ToRole="Penyewa" />
+  </EntityType>
+  <EntityType Name="Penyewa">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="user_id" Type="Int64" Nullable="false" />
+    <Property Name="nama_lengkap" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="nik" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="nomor_hp" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="tanggal_lahir" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="alamat_asal" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="jenis_kelamin" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="foto_profil" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="update_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="deleted_at" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Pemesanan" Relationship="Self.pemesanan_penyewa_id_foreign" FromRole="Penyewa" ToRole="Pemesanan" />
+    <NavigationProperty Name="User" Relationship="Self.penyewa_user_id_foreign" FromRole="Penyewa" ToRole="User" />
+  </EntityType>
+  <EntityType Name="Review">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="user_id" Type="Int64" Nullable="false" />
+    <Property Name="kamar_id" Type="Int64" Nullable="false" />
+    <Property Name="rating" Type="Decimal" Precision="4" Scale="2" Nullable="false" />
+    <Property Name="comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="update_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="deleted_at" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Kamar" Relationship="Self.review_kamar_id_foreign" FromRole="Review" ToRole="Kamar" />
+    <NavigationProperty Name="User" Relationship="Self.review_user_id_foreign" FromRole="Review" ToRole="User" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="username" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="role" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="update_at" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="deleted_at" Type="DateTime" Precision="3" />
+    <Property Name="reset_token" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="reset_token_expiry" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Penyewa" Relationship="Self.penyewa_user_id_foreign" FromRole="User" ToRole="Penyewa" />
+    <NavigationProperty Name="Review" Relationship="Self.review_user_id_foreign" FromRole="User" ToRole="Review" />
+  </EntityType>
+  <Association Name="pemesanan_kamar_id_foreign">
+    <End Role="Kamar" Type="Self.Kamar" Multiplicity="1" />
+    <End Role="Pemesanan" Type="Self.Pemesanan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kamar">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Pemesanan">
+        <PropertyRef Name="kamar_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="review_kamar_id_foreign">
+    <End Role="Kamar" Type="Self.Kamar" Multiplicity="1" />
+    <End Role="Review" Type="Self.Review" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kamar">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Review">
+        <PropertyRef Name="kamar_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="paymentreminder_pembayaran_id_foreign">
+    <End Role="Pembayaran" Type="Self.Pembayaran" Multiplicity="1" />
+    <End Role="PaymentReminder" Type="Self.PaymentReminder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pembayaran">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="PaymentReminder">
+        <PropertyRef Name="pembayaran_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="pembayaran_pemesanan_id_foreign">
+    <End Role="Pemesanan" Type="Self.Pemesanan" Multiplicity="1" />
+    <End Role="Pembayaran" Type="Self.Pembayaran" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pemesanan">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Pembayaran">
+        <PropertyRef Name="pemesanan_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="pemesanan_penyewa_id_foreign">
+    <End Role="Penyewa" Type="Self.Penyewa" Multiplicity="1" />
+    <End Role="Pemesanan" Type="Self.Pemesanan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Penyewa">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Pemesanan">
+        <PropertyRef Name="penyewa_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="penyewa_user_id_foreign">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="Penyewa" Type="Self.Penyewa" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Penyewa">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="review_user_id_foreign">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="Review" Type="Self.Review" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Review">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Kost_RahmatEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Gallery" EntityType="Self.Gallery" />
+    <EntitySet Name="Kamar" EntityType="Self.Kamar" />
+    <EntitySet Name="Laporan" EntityType="Self.Laporan" />
+    <EntitySet Name="PaymentReminder" EntityType="Self.PaymentReminder" />
+    <EntitySet Name="Pembayaran" EntityType="Self.Pembayaran" />
+    <EntitySet Name="Pemesanan" EntityType="Self.Pemesanan" />
+    <EntitySet Name="Penyewa" EntityType="Self.Penyewa" />
+    <EntitySet Name="Review" EntityType="Self.Review" />
+    <EntitySet Name="User" EntityType="Self.User" />
+    <AssociationSet Name="pemesanan_kamar_id_foreign" Association="Self.pemesanan_kamar_id_foreign">
+      <End Role="Kamar" EntitySet="Kamar" />
+      <End Role="Pemesanan" EntitySet="Pemesanan" />
+    </AssociationSet>
+    <AssociationSet Name="review_kamar_id_foreign" Association="Self.review_kamar_id_foreign">
+      <End Role="Kamar" EntitySet="Kamar" />
+      <End Role="Review" EntitySet="Review" />
+    </AssociationSet>
+    <AssociationSet Name="paymentreminder_pembayaran_id_foreign" Association="Self.paymentreminder_pembayaran_id_foreign">
+      <End Role="Pembayaran" EntitySet="Pembayaran" />
+      <End Role="PaymentReminder" EntitySet="PaymentReminder" />
+    </AssociationSet>
+    <AssociationSet Name="pembayaran_pemesanan_id_foreign" Association="Self.pembayaran_pemesanan_id_foreign">
+      <End Role="Pemesanan" EntitySet="Pemesanan" />
+      <End Role="Pembayaran" EntitySet="Pembayaran" />
+    </AssociationSet>
+    <AssociationSet Name="pemesanan_penyewa_id_foreign" Association="Self.pemesanan_penyewa_id_foreign">
+      <End Role="Penyewa" EntitySet="Penyewa" />
+      <End Role="Pemesanan" EntitySet="Pemesanan" />
+    </AssociationSet>
+    <AssociationSet Name="penyewa_user_id_foreign" Association="Self.penyewa_user_id_foreign">
+      <End Role="User" EntitySet="User" />
+      <End Role="Penyewa" EntitySet="Penyewa" />
+    </AssociationSet>
+    <AssociationSet Name="review_user_id_foreign" Association="Self.review_user_id_foreign">
+      <End Role="User" EntitySet="User" />
+      <End Role="Review" EntitySet="Review" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

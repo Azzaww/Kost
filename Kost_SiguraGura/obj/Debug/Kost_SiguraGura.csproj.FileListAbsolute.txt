@@ -11,8 +11,11 @@ D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.exe
 D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.pdb
 D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.Form1.resources
 D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.Sidebar.resources
-D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.exe.config
 D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.BerandaPage.resources
 D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.DataKamar.resources
 D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.DataPenyewa.resources
-D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.Pembayaran.resources
+D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\bin\Debug\EntityFramework.dll
+D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\bin\Debug\EntityFramework.xml
+D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.exe.config
+D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.GalleryForm.resources
+D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.Report.resources

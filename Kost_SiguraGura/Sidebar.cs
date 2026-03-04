@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common.CommandTrees.ExpressionBuilder;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace Kost_SiguraGura
         public Sidebar()
         {
             InitializeComponent();
+            lblName.Text = Session.Username;
         }
 
         private void Sidebar_Load(object sender, EventArgs e)
@@ -46,7 +48,12 @@ namespace Kost_SiguraGura
 
         private void guna2Button4_Click(object sender, EventArgs e)
         {
-            ShowUc(new Pembayaran());
+            ShowUc(new PembayaranForm());
+        }
+
+        private void guna2Button6_Click(object sender, EventArgs e)
+        {
+            ShowUc(new GalleryForm());
         }
     }
 }

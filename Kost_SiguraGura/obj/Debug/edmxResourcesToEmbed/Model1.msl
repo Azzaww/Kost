@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Kost_RahmatModelStoreContainer" CdmEntityContainer="Kost_RahmatEntities1">
+    <EntitySetMapping Name="Gallery">
+      <EntityTypeMapping TypeName="Kost_RahmatModel.Gallery">
+        <MappingFragment StoreEntitySet="Gallery">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="category" ColumnName="category" />
+          <ScalarProperty Name="image_url" ColumnName="image_url" />
+          <ScalarProperty Name="created_at" ColumnName="created_at" />
+          <ScalarProperty Name="update_at" ColumnName="update_at" />
+          <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Kamar">
+      <EntityTypeMapping TypeName="Kost_RahmatModel.Kamar">
+        <MappingFragment StoreEntitySet="Kamar">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="nomor_kamar" ColumnName="nomor_kamar" />
+          <ScalarProperty Name="tipe_kamar" ColumnName="tipe_kamar" />
+          <ScalarProperty Name="fasilitas" ColumnName="fasilitas" />
+          <ScalarProperty Name="harga_per_bulan" ColumnName="harga_per_bulan" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="capacity" ColumnName="capacity" />
+          <ScalarProperty Name="floor" ColumnName="floor" />
+          <ScalarProperty Name="size" ColumnName="size" />
+          <ScalarProperty Name="bedrooms" ColumnName="bedrooms" />
+          <ScalarProperty Name="bathrooms" ColumnName="bathrooms" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="image_url" ColumnName="image_url" />
+          <ScalarProperty Name="created_at" ColumnName="created_at" />
+          <ScalarProperty Name="update_at" ColumnName="update_at" />
+          <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Laporan">
+      <EntityTypeMapping TypeName="Kost_RahmatModel.Laporan">
+        <MappingFragment StoreEntitySet="Laporan">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="periode" ColumnName="periode" />
+          <ScalarProperty Name="total_pemasukan" ColumnName="total_pemasukan" />
+          <ScalarProperty Name="jumlah_penghuni_aktif" ColumnName="jumlah_penghuni_aktif" />
+          <ScalarProperty Name="created_at" ColumnName="created_at" />
+          <ScalarProperty Name="update_at" ColumnName="update_at" />
+          <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PaymentReminder">
+      <EntityTypeMapping TypeName="Kost_RahmatModel.PaymentReminder">
+        <MappingFragment StoreEntitySet="PaymentReminder">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="pembayaran_id" ColumnName="pembayaran_id" />
+          <ScalarProperty Name="jumlah_bayar" ColumnName="jumlah_bayar" />
+          <ScalarProperty Name="tanggal_reminder" ColumnName="tanggal_reminder" />
+          <ScalarProperty Name="status_reminder" ColumnName="status_reminder" />
+          <ScalarProperty Name="is_sent" ColumnName="is_sent" />
+          <ScalarProperty Name="created_at" ColumnName="created_at" />
+          <ScalarProperty Name="update_at" ColumnName="update_at" />
+          <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Pembayaran">
+      <EntityTypeMapping TypeName="Kost_RahmatModel.Pembayaran">
+        <MappingFragment StoreEntitySet="Pembayaran">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="pemesanan_id" ColumnName="pemesanan_id" />
+          <ScalarProperty Name="jumlah_bayar" ColumnName="jumlah_bayar" />
+          <ScalarProperty Name="tanggal_bayar" ColumnName="tanggal_bayar" />
+          <ScalarProperty Name="bukti_transfer" ColumnName="bukti_transfer" />
+          <ScalarProperty Name="status_pembayaran" ColumnName="status_pembayaran" />
+          <ScalarProperty Name="order_id" ColumnName="order_id" />
+          <ScalarProperty Name="snap_token" ColumnName="snap_token" />
+          <ScalarProperty Name="metode_pembyaran" ColumnName="metode_pembyaran" />
+          <ScalarProperty Name="tipe_pembayaran" ColumnName="tipe_pembayaran" />
+          <ScalarProperty Name="jumlah_dp" ColumnName="jumlah_dp" />
+          <ScalarProperty Name="tanggal_jatuh_tempo" ColumnName="tanggal_jatuh_tempo" />
+          <ScalarProperty Name="created_at" ColumnName="created_at" />
+          <ScalarProperty Name="update_at" ColumnName="update_at" />
+          <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Pemesanan">
+      <EntityTypeMapping TypeName="Kost_RahmatModel.Pemesanan">
+        <MappingFragment StoreEntitySet="Pemesanan">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="penyewa_id" ColumnName="penyewa_id" />
+          <ScalarProperty Name="kamar_id" ColumnName="kamar_id" />
+          <ScalarProperty Name="tanggal_mulai" ColumnName="tanggal_mulai" />
+          <ScalarProperty Name="durasi_sewa" ColumnName="durasi_sewa" />
+          <ScalarProperty Name="status_pemesanan" ColumnName="status_pemesanan" />
+          <ScalarProperty Name="created_at" ColumnName="created_at" />
+          <ScalarProperty Name="update_at" ColumnName="update_at" />
+          <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Penyewa">
+      <EntityTypeMapping TypeName="Kost_RahmatModel.Penyewa">
+        <MappingFragment StoreEntitySet="Penyewa">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="nama_lengkap" ColumnName="nama_lengkap" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="nik" ColumnName="nik" />
+          <ScalarProperty Name="nomor_hp" ColumnName="nomor_hp" />
+          <ScalarProperty Name="tanggal_lahir" ColumnName="tanggal_lahir" />
+          <ScalarProperty Name="alamat_asal" ColumnName="alamat_asal" />
+          <ScalarProperty Name="jenis_kelamin" ColumnName="jenis_kelamin" />
+          <ScalarProperty Name="foto_profil" ColumnName="foto_profil" />
+          <ScalarProperty Name="created_at" ColumnName="created_at" />
+          <ScalarProperty Name="update_at" ColumnName="update_at" />
+          <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Review">
+      <EntityTypeMapping TypeName="Kost_RahmatModel.Review">
+        <MappingFragment StoreEntitySet="Review">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="kamar_id" ColumnName="kamar_id" />
+          <ScalarProperty Name="rating" ColumnName="rating" />
+          <ScalarProperty Name="comment" ColumnName="comment" />
+          <ScalarProperty Name="created_at" ColumnName="created_at" />
+          <ScalarProperty Name="update_at" ColumnName="update_at" />
+          <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="User">
+      <EntityTypeMapping TypeName="Kost_RahmatModel.User">
+        <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="role" ColumnName="role" />
+          <ScalarProperty Name="created_at" ColumnName="created_at" />
+          <ScalarProperty Name="update_at" ColumnName="update_at" />
+          <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+          <ScalarProperty Name="reset_token" ColumnName="reset_token" />
+          <ScalarProperty Name="reset_token_expiry" ColumnName="reset_token_expiry" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
