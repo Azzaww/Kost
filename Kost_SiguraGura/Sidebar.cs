@@ -55,5 +55,16 @@ namespace Kost_SiguraGura
         {
             ShowUc(new GalleryForm());
         }
+
+        private void guna2Button5_Click(object sender, EventArgs e)
+        {
+            ShowUc(new Report());
+        }
+
+        private void guna2Button7_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            new Form1().Show();
+        }
     }
 }

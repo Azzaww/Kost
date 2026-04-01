@@ -11,5 +11,6 @@ namespace Kost_SiguraGura
         public static long UserId { get; set; }
         public static string UserRole { get; set; }
         public static string Username { get; set; }
+        public static string Token { get; set; }
     }
 }

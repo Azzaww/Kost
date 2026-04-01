@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,7 +15,6 @@ namespace Kost_SiguraGura
 {
     public partial class Form1 : Form
     {
-        Kost_RahmatEntities1 db = new Kost_RahmatEntities1();
         public Form1()
         {
             InitializeComponent();
@@ -39,35 +40,54 @@ namespace Kost_SiguraGura
 
         }
 
-        private void btnAuth_Click_2(object sender, EventArgs e)
+        private async void btnAuth_Click_2(object sender, EventArgs e)
         {
-            var username = txtUsername.Text;
-            var password = txtPassword.Text;
+            var dataLogin = new LoginRequest { username = txtUsername.Text, password = txtPassword.Text };
+            string jsonString = JsonConvert.SerializeObject(dataLogin);
+            var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            try
             {
-                MessageBox.Show("Username dan Password wajib diisi!");
-                return;
+                string url = "https://rahmatzaw.elarisnoir.my.id/api/auth/login";
+                HttpResponseMessage response = await ApiClient.Client.PostAsync(url, content);
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Newtonsoft.Json.Linq.JObject result = Newtonsoft.Json.Linq.JObject.Parse(responseBody);
+                    Newtonsoft.Json.Linq.JToken userData = null;
+
+                    // --- LOGIKA PENCARI DATA USER (OTOMATIS) ---
+                    if (result["users"] != null) userData = result["users"][0];
+                    else if (result["user"] != null) userData = result["user"];
+                    else if (result["data"] != null) userData = result["data"];
+                    else userData = result; // Ambil root jika tidak ada pembungkus
+
+                    if (userData != null && userData.HasValues)
+                    {
+                        Session.UserId = (long)(userData["id"] ?? 0);
+                        Session.UserRole = userData["role"]?.ToString() ?? "admin";
+                        Session.Username = userData["username"]?.ToString() ?? txtUsername.Text;
+
+                        Sidebar main = new Sidebar();
+                        main.Show();
+                        this.Hide();
+                    }
+                    else
+                    {
+                        // Jika masih tidak ketemu, kita tampilkan isi JSON-nya biar kita tahu namanya apa
+                        MessageBox.Show("Struktur JSON tidak dikenali. Isi Respon:\n" + responseBody);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Login Gagal! Username/Password salah atau Server Error.");
+                }
             }
-
-            var user = db.User.FirstOrDefault(x => x.username == username && x.password == password);
-
-            if (user == null)
+            catch (Exception ex)
             {
-                MessageBox.Show("Username dan Password tidak ditemukan!");
-                return;
-            }
-
-            Session.UserId = user.id;
-            Session.Username = user.username;
-            Session.UserRole = user.role;
-
-            this.Hide();
-
-
-            if (user.role == "admin")
-            {
-                new Sidebar().Show();
+                MessageBox.Show("Terjadi Kesalahan: " + ex.Message);
             }
         }
 
