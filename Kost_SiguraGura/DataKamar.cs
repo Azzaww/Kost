@@ -98,6 +98,7 @@ namespace Kost_SiguraGura
         private void DataKamar_Load(object sender, EventArgs e)
         {
             LoadDataKamar();
+            txtSearch.PlaceholderText = "Search Rooms...";
         }
 
         private async void LoadDataKamar()

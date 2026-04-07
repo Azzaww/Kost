@@ -145,6 +145,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Report.resx">
       <DependentUpon>Report.cs</DependentUpon>
@@ -168,6 +169,60 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\home_gray.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\room_gray.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tenant_gray.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\payment_gray.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\report_gray.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gallery_gray.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\home_yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\room_yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tenant_yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\payment_yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\report_yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gallery_yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\export.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\calendar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\export_black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

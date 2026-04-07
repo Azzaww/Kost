@@ -117,29 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="guna2Button1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        EQAACxEBf2RfkQAAAPxJREFUWEftls8JwjAcRntXFxBBULwpOIRHHcJdBN1CQXAJD4J/FnCBgg6i30cS
-        iSExlaSEQh48+FHT5LUHaRHICA7EmIYd3IoxDXtpMnJADsgBtQQs4dHhHOrYAhbQdi/l3l5W8Ak3hms4
-        gTq2AK7hWvN+7sm9vXDRWYxebAEuuGcOaHbAFPbE+MEW0IVjMX4RHHCAD6h/gJgB/I1rbN8IwQEteII8
-        YMgLQA/owxLeYIcXDIIDiBmhAnyHkygBhAdcISMuUs685jqcRAsg6k28pL+eXBE1gKg34XtyRfQA0pZW
-        oZaAf8gBOaBZAXc4iyz3rByg/uFiawQUxRtWh40rRkInOwAAAABJRU5ErkJggg==
-</value>
-  </data>
-  <data name="guna2Button2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        EQAACxEBf2RfkQAAAdRJREFUWEftlbtKQ1EQRdOkEW3yAwGt8gEBRWxFsBb8AguxsBMRsRJttJV0ATsh
-        qFUKO23UQnxUFgoKtuKrUYS418mMHNDkhkgeQjasYh5nZsO9nJOqpUqlMiFeBDoX/VZKlHoHxAUHJWaM
-        W6lx6dCWOBKTAo1aKVH0Vo+Es8zYstLvUkNGzImFiBNREn0CYSiu14NexFlmMCuusytj64OBongSNxHP
-        IjbwIOJ6PehFboBZcZ1dRVsfDJTFpoVBigsiNjBmpUTRWz3ybaBgpSDFm6JsYU0Dy+JN3IpPMWilRKl3
-        yM5wlhlLVgpS3JCBtJgWM2LY0g1LZ0bsLDPSlg5SnGyglapl4FrstAl2/TBwKfjx2gG7uu8TdJcBxasi
-        vjz+wqqNDVLckAG+1ZXw63NNoA3huTPDY2qIXs8xo6mLCAMlC4mzAuUsRW4bLCTO0SBlLUWu6ZuwKwzw
-        ik0ZswLNC88dGh5TQ/R6jhlNG/gQjwYvGOJl89y74TE1RK/nmNH7B/6vAd5yv0zuBLoXnns1PKaG6PUc
-        M5o2wCXDmw6LAq0Izx0bHlND9HqOGb1/4H9+gs6+hq1UVxrYE6divU2wa9fWBwN5sS8O2gS78ra+k0ql
-        vgBH9/yZLJ+mMwAAAABJRU5ErkJggg==
-</value>
-  </data>
 </root>
