@@ -47,9 +47,9 @@
             this.guna2HtmlLabel3.ForeColor = System.Drawing.Color.Gray;
             this.guna2HtmlLabel3.Location = new System.Drawing.Point(23, 47);
             this.guna2HtmlLabel3.Name = "guna2HtmlLabel3";
-            this.guna2HtmlLabel3.Size = new System.Drawing.Size(271, 24);
+            this.guna2HtmlLabel3.Size = new System.Drawing.Size(278, 24);
             this.guna2HtmlLabel3.TabIndex = 6;
-            this.guna2HtmlLabel3.Text = "Kelola informasi dan riwayat penyewa ";
+            this.guna2HtmlLabel3.Text = "Manage tenant information and history";
             this.guna2HtmlLabel3.UseWaitCursor = true;
             // 
             // guna2HtmlLabel1
@@ -59,9 +59,9 @@
             this.guna2HtmlLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(158)))), ((int)(((byte)(11)))));
             this.guna2HtmlLabel1.Location = new System.Drawing.Point(23, 22);
             this.guna2HtmlLabel1.Name = "guna2HtmlLabel1";
-            this.guna2HtmlLabel1.Size = new System.Drawing.Size(140, 31);
+            this.guna2HtmlLabel1.Size = new System.Drawing.Size(122, 31);
             this.guna2HtmlLabel1.TabIndex = 5;
-            this.guna2HtmlLabel1.Text = "Data Penyewa";
+            this.guna2HtmlLabel1.Text = "Tenant Data";
             this.guna2HtmlLabel1.UseWaitCursor = true;
             // 
             // txtSearch
@@ -77,13 +77,14 @@
             this.txtSearch.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
             this.txtSearch.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
             this.txtSearch.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.txtSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSearch.Font = new System.Drawing.Font("Inter", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSearch.ForeColor = System.Drawing.Color.Black;
             this.txtSearch.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.txtSearch.IconLeft = ((System.Drawing.Image)(resources.GetObject("txtSearch.IconLeft")));
             this.txtSearch.Location = new System.Drawing.Point(415, 29);
+            this.txtSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.PlaceholderText = "";
+            this.txtSearch.PlaceholderText = "Looking for renters...";
             this.txtSearch.SelectedText = "";
             this.txtSearch.Size = new System.Drawing.Size(516, 38);
             this.txtSearch.TabIndex = 21;

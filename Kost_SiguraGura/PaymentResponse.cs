@@ -18,7 +18,6 @@ namespace Kost_SiguraGura
         [JsonProperty("jumlah_bayar")]
         public long JumlahBayar { get; set; }
 
-        // Properti baru untuk memfilter status
         [JsonProperty("status_pembayaran")]
         public string StatusPembayaran { get; set; }
     }
