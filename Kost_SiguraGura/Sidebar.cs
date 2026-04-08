@@ -33,12 +33,10 @@ namespace Kost_SiguraGura
             {
                 if (c is Guna.UI2.WinForms.Guna2Button btn)
                 {
-                    // Reset ke Default
                     btn.FillColor = Color.Transparent;
                     btn.ForeColor = Color.Gray;
                     btn.CustomBorderThickness = new Padding(0, 0, 0, 0);
 
-                    // Kembalikan ikon ke warna abu-abu (sesuaikan dengan nama resource kamu)
                     if (btn.Name == "guna2Button1") btn.Image = Properties.Resources.home_gray;
                     if (btn.Name == "guna2Button2") btn.Image = Properties.Resources.room_gray;
                     if (btn.Name == "guna2Button3") btn.Image = Properties.Resources.tenant_gray;
@@ -54,7 +52,6 @@ namespace Kost_SiguraGura
             selectedBtn.CustomBorderColor = amberYellow;
             selectedBtn.CustomBorderThickness = new Padding(4, 0, 0, 0);
 
-            //// Ganti ikon tombol yang diklik ke versi kuning
             if (selectedBtn.Name == "guna2Button1") selectedBtn.Image = Properties.Resources.home_yellow;
             if (selectedBtn.Name == "guna2Button2") selectedBtn.Image = Properties.Resources.room_yellow;
             if (selectedBtn.Name == "guna2Button3") selectedBtn.Image = Properties.Resources.tenant_yellow;

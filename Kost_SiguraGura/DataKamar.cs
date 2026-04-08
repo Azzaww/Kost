@@ -155,5 +155,10 @@ namespace Kost_SiguraGura
         {
             ApplyFilters(); // Panggil filter saat pilihan status berubah
         }
+
+        private void guna2Button2_Click(object sender, EventArgs e)
+        {
+            new AddKamar().Show();
+        }
     }
 }

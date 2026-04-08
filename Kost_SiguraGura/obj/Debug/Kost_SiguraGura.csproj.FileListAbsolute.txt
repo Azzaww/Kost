@@ -22,3 +22,5 @@ D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.Report.r
 D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\bin\Debug\Newtonsoft.Json.dll
 D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\bin\Debug\Newtonsoft.Json.xml
 D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.PembayaranForm.resources
+D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.AddKamar.resources
+D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.AddGallery.resources

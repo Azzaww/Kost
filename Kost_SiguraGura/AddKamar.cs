@@ -10,16 +10,11 @@ using System.Windows.Forms;
 
 namespace Kost_SiguraGura
 {
-    public partial class GalleryForm : UserControl
+    public partial class AddKamar : Form
     {
-        public GalleryForm()
+        public AddKamar()
         {
             InitializeComponent();
-        }
-
-        private void btnAddImage_Click(object sender, EventArgs e)
-        {
-            new AddGallery().Show();
         }
     }
 }
