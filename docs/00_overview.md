@@ -94,4 +94,9 @@ Aplikasi manajemen kost berbasis **Desktop (Windows Forms C#)** yang terhubung k
                           └─► Buka Sidebar (Main Shell)
                                     │
                                     └─► Load BerandaPage (default)
-```
+
+---
+
+## ⏭️ Langkah Berikutnya
+Pelajari komponen dasar aplikasi seperti koneksi API dan manajemen sesi di **[Modul 1 — Core & Infrastruktur](./01_core.md)**.
+

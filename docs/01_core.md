@@ -153,3 +153,8 @@ namespace Kost_SiguraGura
     }
 }
 ```
+
+---
+
+## ⏭️ Langkah Berikutnya
+Setelah memahami pondasi infrastruktur, pelajari bagaimana data dimodelkan dalam objek C# di **[Modul 2 — Models / Blueprint Data](./02_models.md)**.

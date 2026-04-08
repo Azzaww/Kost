@@ -284,3 +284,8 @@ PictureBox pb = new PictureBox
 pb.LoadAsync(kamar.ThumbnailUrl);
 flowLayoutPanel1.Controls.Add(pb);
 ```
+
+---
+
+## ⏭️ Langkah Berikutnya
+Gunakan data yang ada untuk menghasilkan ringkasan laporan di **[Modul 9 — Laporan](./09_laporan.md)**.

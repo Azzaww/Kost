@@ -244,3 +244,8 @@ public static void Clear()
     Token    = null;
 }
 ```
+
+---
+
+## ⏭️ Langkah Berikutnya
+Setelah user berhasil login, pelajari bagaimana data ringkasan ditampilkan di halaman utama di **[Modul 4 — Dashboard (Beranda)](./04_beranda.md)**.

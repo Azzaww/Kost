@@ -332,3 +332,8 @@ private async void GalleryForm_Load(object sender, EventArgs e)
     }
 }
 ```
+
+---
+
+## ⏭️ Langkah Berikutnya
+Setelah manajemen kamar, pelajari bagaimana mengelola data orang yang menyewa kamar di **[Modul 6 — Manajemen Penyewa](./06_penyewa.md)**.

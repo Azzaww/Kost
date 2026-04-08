@@ -291,3 +291,8 @@ Total Pending:
 │                                                         │
 └─────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## ⏭️ Langkah Berikutnya
+Terakhir, pelajari bagaimana seluruh modul ini dihubungkan dalam satu navigasi utama di **[Modul 10 — Navigasi (Sidebar)](./10_sidebar.md)**.

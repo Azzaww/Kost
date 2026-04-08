@@ -258,3 +258,8 @@ Sidebar (Form)
        Sidebar kiri              Konten kanan
      (guna2Panel1)              (guna2Panel2)
 ```
+
+---
+
+## 🏠 Kembali ke Awal
+Semua modul telah dibahas. Anda bisa kembali meninjau arsitektur global di **[Overview Proyek](./00_overview.md)**.

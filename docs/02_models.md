@@ -355,3 +355,8 @@ LoginRequest ──► POST /api/auth/login ──► [session tersimpan di Sess
                             │                       │                      │
                          List<Kamar>          List<Penyewa>       List<Pembayaran>
 ```
+
+---
+
+## ⏭️ Langkah Berikutnya
+Dengan blueprint data yang sudah siap, pelajari proses autentikasi user ke server di **[Modul 3 — Autentikasi (Login)](./03_auth.md)**.

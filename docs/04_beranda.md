@@ -254,3 +254,8 @@ private async Task UpdateJumlahKamar()
     }
 }
 ```
+
+---
+
+## ⏭️ Langkah Berikutnya
+Pelajari pengelolaan data aset utama aplikasi, yaitu kamar kost, di **[Modul 5 — Manajemen Kamar](./05_kamar.md)**.

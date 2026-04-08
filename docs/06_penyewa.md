@@ -271,3 +271,8 @@ private void ApplyFilters()
     dataGridView1.DataSource = bindingListPenyewa;
 }
 ```
+
+---
+
+## ⏭️ Langkah Berikutnya
+Lanjutkan ke proses pencatatan transaksi keuangan dari penyewa di **[Modul 7 — Pembayaran](./07_pembayaran.md)**.

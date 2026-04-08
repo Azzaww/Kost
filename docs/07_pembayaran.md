@@ -271,3 +271,8 @@ lblIncome.Text = FormatKeRupiahSingkat(total); // → "Rp 3,2 jt"
 **Dari data di atas:**
 - Total Confirmed: Rp 800.000 + Rp 800.000 = **Rp 1.600.000**
 - Total Pending: **Rp 1.500.000**
+
+---
+
+## ⏭️ Langkah Berikutnya
+Pelajari bagaimana menampilkan visualisasi kamar melalui foto-foto di **[Modul 8 — Galeri Foto](./08_gallery.md)**.
