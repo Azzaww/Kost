@@ -10,16 +10,11 @@ using System.Windows.Forms;
 
 namespace Kost_SiguraGura
 {
-    public partial class PembayaranForm : UserControl
+    public partial class PembayaranDetail : Form
     {
-        public PembayaranForm()
+        public PembayaranDetail()
         {
             InitializeComponent();
-        }
-
-        private void guna2Button2_Click(object sender, EventArgs e)
-        {
-            new PembayaranDetail().Show();
         }
     }
 }
