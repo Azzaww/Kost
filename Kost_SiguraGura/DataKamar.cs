@@ -1,5 +1,4 @@
-﻿using Kost_SiguraGura.Kost_SiguraGura;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -158,7 +157,11 @@ namespace Kost_SiguraGura
 
         private void guna2Button2_Click(object sender, EventArgs e)
         {
-            new AddKamar().Show();
+            AddKamar form = new AddKamar();
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                LoadDataKamar(); // Refresh data setelah tambah
+            }
         }
     }
 }

@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Kost_SiguraGura
 {
-    public partial class DataPenyewa : UserControl
+    public partial class DataPenyewa : System.Windows.Forms.UserControl
     {
         private BindingList<Penyewa> bindingListPenyewa = new BindingList<Penyewa>();
         private List<Penyewa> fullListPenyewa = new List<Penyewa>();
