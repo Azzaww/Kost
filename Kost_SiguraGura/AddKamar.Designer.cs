@@ -47,9 +47,9 @@
             this.guna2HtmlLabel10 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.NuBedrooms = new Guna.UI2.WinForms.Guna2NumericUpDown();
             this.NuBathrooms = new Guna.UI2.WinForms.Guna2NumericUpDown();
-            this.guna2TextBox1 = new Guna.UI2.WinForms.Guna2TextBox();
+            this.FacilitiesTextBox1 = new Guna.UI2.WinForms.Guna2TextBox();
             this.guna2HtmlLabel11 = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            this.guna2TextBox2 = new Guna.UI2.WinForms.Guna2TextBox();
+            this.DescriptionTextBox2 = new Guna.UI2.WinForms.Guna2TextBox();
             this.guna2HtmlLabel12 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.ImageTextBox3 = new Guna.UI2.WinForms.Guna2TextBox();
             this.guna2HtmlLabel13 = new Guna.UI2.WinForms.Guna2HtmlLabel();
@@ -109,6 +109,7 @@
             this.txtRoomName.SelectedText = "";
             this.txtRoomName.Size = new System.Drawing.Size(281, 44);
             this.txtRoomName.TabIndex = 6;
+            this.txtRoomName.TextChanged += new System.EventHandler(this.txtRoomName_TextChanged);
             // 
             // guna2HtmlLabel3
             // 
@@ -183,6 +184,7 @@
             this.NuPrice.Size = new System.Drawing.Size(281, 44);
             this.NuPrice.TabIndex = 17;
             this.NuPrice.UpDownButtonFillColor = System.Drawing.Color.White;
+            this.NuPrice.ValueChanged += new System.EventHandler(this.NuPrice_ValueChanged);
             // 
             // CbType
             // 
@@ -204,6 +206,7 @@
             this.CbType.Name = "CbType";
             this.CbType.Size = new System.Drawing.Size(280, 36);
             this.CbType.TabIndex = 19;
+            this.CbType.SelectedIndexChanged += new System.EventHandler(this.CbType_SelectedIndexChanged);
             // 
             // CbStatus
             // 
@@ -226,6 +229,7 @@
             this.CbStatus.Name = "CbStatus";
             this.CbStatus.Size = new System.Drawing.Size(280, 36);
             this.CbStatus.TabIndex = 20;
+            this.CbStatus.SelectedIndexChanged += new System.EventHandler(this.CbStatus_SelectedIndexChanged);
             // 
             // NuCapacity
             // 
@@ -240,6 +244,7 @@
             this.NuCapacity.Size = new System.Drawing.Size(281, 44);
             this.NuCapacity.TabIndex = 21;
             this.NuCapacity.UpDownButtonFillColor = System.Drawing.Color.White;
+            this.NuCapacity.ValueChanged += new System.EventHandler(this.NuCapacity_ValueChanged);
             // 
             // NuFloor
             // 
@@ -254,6 +259,7 @@
             this.NuFloor.Size = new System.Drawing.Size(281, 44);
             this.NuFloor.TabIndex = 22;
             this.NuFloor.UpDownButtonFillColor = System.Drawing.Color.White;
+            this.NuFloor.ValueChanged += new System.EventHandler(this.NuFloor_ValueChanged);
             // 
             // txtSize
             // 
@@ -276,6 +282,7 @@
             this.txtSize.SelectedText = "";
             this.txtSize.Size = new System.Drawing.Size(177, 44);
             this.txtSize.TabIndex = 24;
+            this.txtSize.TextChanged += new System.EventHandler(this.txtSize_TextChanged);
             // 
             // guna2HtmlLabel8
             // 
@@ -326,6 +333,7 @@
             this.NuBedrooms.Size = new System.Drawing.Size(177, 44);
             this.NuBedrooms.TabIndex = 29;
             this.NuBedrooms.UpDownButtonFillColor = System.Drawing.Color.White;
+            this.NuBedrooms.ValueChanged += new System.EventHandler(this.NuBedrooms_ValueChanged);
             // 
             // NuBathrooms
             // 
@@ -340,8 +348,9 @@
             this.NuBathrooms.Size = new System.Drawing.Size(177, 44);
             this.NuBathrooms.TabIndex = 30;
             this.NuBathrooms.UpDownButtonFillColor = System.Drawing.Color.White;
+            this.NuBathrooms.ValueChanged += new System.EventHandler(this.NuBathrooms_ValueChanged);
             // 
-            // guna2TextBox1
+            // FacilitiesTextBox1
             // 
             this.guna2TextBox1.BorderColor = System.Drawing.Color.Silver;
             this.guna2TextBox1.BorderRadius = 8;
@@ -375,7 +384,7 @@
             this.guna2HtmlLabel11.TabIndex = 31;
             this.guna2HtmlLabel11.Text = "Facilities (comma separated)";
             // 
-            // guna2TextBox2
+            // DescriptionTextBox2
             // 
             this.guna2TextBox2.BorderColor = System.Drawing.Color.Silver;
             this.guna2TextBox2.BorderRadius = 8;
@@ -508,9 +517,9 @@
             this.Controls.Add(this.btnImage);
             this.Controls.Add(this.ImageTextBox3);
             this.Controls.Add(this.guna2HtmlLabel13);
-            this.Controls.Add(this.guna2TextBox2);
+            this.Controls.Add(this.DescriptionTextBox2);
             this.Controls.Add(this.guna2HtmlLabel12);
-            this.Controls.Add(this.guna2TextBox1);
+            this.Controls.Add(this.FacilitiesTextBox1);
             this.Controls.Add(this.guna2HtmlLabel11);
             this.Controls.Add(this.NuBathrooms);
             this.Controls.Add(this.NuBedrooms);
@@ -566,9 +575,9 @@
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel10;
         private Guna.UI2.WinForms.Guna2NumericUpDown NuBedrooms;
         private Guna.UI2.WinForms.Guna2NumericUpDown NuBathrooms;
-        private Guna.UI2.WinForms.Guna2TextBox guna2TextBox1;
+        private Guna.UI2.WinForms.Guna2TextBox FacilitiesTextBox1;
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel11;
-        private Guna.UI2.WinForms.Guna2TextBox guna2TextBox2;
+        private Guna.UI2.WinForms.Guna2TextBox DescriptionTextBox2;
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel12;
         private Guna.UI2.WinForms.Guna2TextBox ImageTextBox3;
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel13;

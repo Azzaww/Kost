@@ -1,4 +1,4 @@
-.aider*
+# Visual Studio
 .vs/
 [Bb]in/
 [Oo]bj/
@@ -6,6 +6,10 @@
 *.suo
 *.userosscache
 *.sln.docstates
+
+# Aider history
+.aider.chat.history.md
+.aider.input.history
 
 # Analysis files
 ANALISIS_ADDKAMAR_CS.md

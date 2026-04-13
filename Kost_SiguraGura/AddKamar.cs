@@ -471,5 +471,65 @@ namespace Kost_SiguraGura
         {
             // Optional: Bisa tambahkan logic jika text berubah
         }
+
+        private void CbStatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CbType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtRoomName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void NuPrice_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void NuCapacity_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void NuFloor_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtSize_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void NuBedrooms_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void NuBathrooms_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RoomImageTextBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void DescriptionTextBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FacilitiesTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
