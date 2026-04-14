@@ -63,14 +63,14 @@ namespace Kost_SiguraGura
                         if (listPembayaran != null && listPembayaran.Count > 0)
                         {
                             // LINQ: Filter hanya yang statusnya "Confirmed" lalu jumlahkan
-                            long total = listPembayaran
+                            decimal total = listPembayaran
                                 .Where(p => p.StatusPembayaran != null &&
                                             p.StatusPembayaran.Equals("Confirmed", StringComparison.OrdinalIgnoreCase))
                                 .Sum(p => p.JumlahBayar);
 
                             // Update UI lewat Invoke agar aman dari cross-thread error
                             this.Invoke((MethodInvoker)delegate {
-                                lblIncome.Text = FormatKeRupiahSingkat(total);
+                                lblIncome.Text = FormatKeRupiahSingkat((long)total);
                             });
                         }
                         else

@@ -36,6 +36,24 @@ namespace Kost_SiguraGura
 
         [JsonProperty("status")]
         public string STATUS { get; set; }
+
+        [JsonProperty("capacity")]
+        public int KAPASITAS { get; set; }
+
+        [JsonProperty("size")]
+        public string SIZE { get; set; }
+
+        [JsonProperty("bedrooms")]
+        public int BEDROOMS { get; set; }
+
+        [JsonProperty("bathrooms")]
+        public int BATHROOMS { get; set; }
+
+        [JsonProperty("fasilitas")]
+        public string FACILITIES { get; set; }
+
+        [JsonProperty("description")]
+        public string DESCRIPTION { get; set; }
     }
 
     public class KamarResponse
