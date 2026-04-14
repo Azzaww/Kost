@@ -83,6 +83,16 @@ namespace Kost_SiguraGura.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap calendar_gray {
+            get {
+                object obj = ResourceManager.GetObject("calendar_gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap export {
             get {
                 object obj = ResourceManager.GetObject("export", resourceCulture);
@@ -146,6 +156,26 @@ namespace Kost_SiguraGura.Properties {
         internal static System.Drawing.Bitmap icon {
             get {
                 object obj = ResourceManager.GetObject("icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icon_orange {
+            get {
+                object obj = ResourceManager.GetObject("icon_orange", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icon_orange1 {
+            get {
+                object obj = ResourceManager.GetObject("icon_orange1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -226,6 +256,16 @@ namespace Kost_SiguraGura.Properties {
         internal static System.Drawing.Bitmap tenant_gray {
             get {
                 object obj = ResourceManager.GetObject("tenant_gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tenant_white {
+            get {
+                object obj = ResourceManager.GetObject("tenant_white", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

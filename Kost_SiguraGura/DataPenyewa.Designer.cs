@@ -86,6 +86,7 @@
             this.txtSearch.Location = new System.Drawing.Point(151, 4);
             this.txtSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtSearch.Name = "txtSearch";
+            this.txtSearch.PlaceholderForeColor = System.Drawing.Color.DarkGray;
             this.txtSearch.PlaceholderText = "Looking for renters...";
             this.txtSearch.SelectedText = "";
             this.txtSearch.Size = new System.Drawing.Size(296, 36);

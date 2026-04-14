@@ -107,5 +107,10 @@ namespace Kost_SiguraGura
             this.Close();
             new Form1().Show();
         }
+
+        private void guna2Panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

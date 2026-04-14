@@ -25,3 +25,4 @@ D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.Pembayar
 D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.AddKamar.resources
 D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.AddGallery.resources
 D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.PembayaranDetail.resources
+D:\Projek UPK\Kost_SiguraGura\Kost_SiguraGura\obj\Debug\Kost_SiguraGura.PenyewaDetail.resources
