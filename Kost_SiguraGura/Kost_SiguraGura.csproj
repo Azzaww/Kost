@@ -149,6 +149,12 @@
     <Compile Include="Sidebar.Designer.cs">
       <DependentUpon>Sidebar.cs</DependentUpon>
     </Compile>
+    <Compile Include="TenantDetailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TenantDetailForm.Designer.cs">
+      <DependentUpon>TenantDetailForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AddGallery.resx">
       <DependentUpon>AddGallery.cs</DependentUpon>
     </EmbeddedResource>

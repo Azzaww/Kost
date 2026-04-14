@@ -154,5 +154,121 @@ namespace Kost_SiguraGura
 
             return methodEnglish;
         }
+
+        /// <summary>
+        /// Get list of tenants with pagination and optional search/filter
+        /// </summary>
+        public static async Task<TenantListResponse> GetTenants(int page = 1, int limit = 20, string search = "", string role = "")
+        {
+            try
+            {
+                string url = $"{BaseUrl}/tenants?page={page}&limit={limit}";
+
+                if (!string.IsNullOrEmpty(search))
+                    url += $"&search={Uri.EscapeDataString(search)}";
+
+                if (!string.IsNullOrEmpty(role))
+                    url += $"&role={role}";
+
+                HttpResponseMessage response = await Client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeObject<TenantListResponse>(jsonResponse);
+                    return result ?? new TenantListResponse { Data = new List<Penyewa>(), Meta = new PaginationMeta() };
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new Exception("Sesi login habis. Silakan login ulang.");
+                }
+                else
+                {
+                    throw new Exception($"Gagal mengambil data tenant. Status: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error saat mengambil data tenant: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Suspend a tenant (change role to non_active)
+        /// </summary>
+        public static async Task<bool> SuspendTenant(int tenantId)
+        {
+            try
+            {
+                string url = $"{BaseUrl}/tenants/{tenantId}/deactivate";
+                HttpResponseMessage response = await Client.PutAsync(url, null);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new Exception("Sesi login habis. Silakan login ulang.");
+                }
+                else
+                {
+                    throw new Exception($"Gagal suspend tenant. Status: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error saat suspend tenant: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Get payment history for a specific tenant
+        /// </summary>
+        public static async Task<List<TenantPaymentHistory>> GetTenantPaymentHistory(int tenantId)
+        {
+            try
+            {
+                string url = $"{BaseUrl}/tenant-payments/{tenantId}";
+                HttpResponseMessage response = await Client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+
+                    // Try to parse as array first, then as object with data property
+                    var result = JsonConvert.DeserializeObject<dynamic>(jsonResponse);
+
+                    List<TenantPaymentHistory> paymentHistory = new List<TenantPaymentHistory>();
+
+                    if (result is Newtonsoft.Json.Linq.JArray)
+                    {
+                        paymentHistory = JsonConvert.DeserializeObject<List<TenantPaymentHistory>>(jsonResponse);
+                    }
+                    else if (result["data"] != null)
+                    {
+                        paymentHistory = JsonConvert.DeserializeObject<List<TenantPaymentHistory>>(result["data"].ToString());
+                    }
+
+                    return paymentHistory ?? new List<TenantPaymentHistory>();
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new Exception("Sesi login habis. Silakan login ulang.");
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return new List<TenantPaymentHistory>();
+                }
+                else
+                {
+                    throw new Exception($"Gagal mengambil riwayat pembayaran. Status: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error saat mengambil riwayat pembayaran: {ex.Message}");
+            }
+        }
     }
 }
