@@ -502,5 +502,10 @@ namespace Kost_SiguraGura
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void dataGridView1_CellMouseMove_1(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            
+        }
     }
 }

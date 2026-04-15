@@ -1,6 +1,6 @@
 ﻿namespace Kost_SiguraGura
 {
-    partial class PembayaranDetail
+    partial class PaymentDetail
     {
         /// <summary>
         /// Required designer variable.
@@ -413,7 +413,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "PembayaranDetail";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Load += new System.EventHandler(this.PembayaranDetail_Load);
+            this.Load += new System.EventHandler(this.PaymentDetail_Load);
             this.guna2Panel1.ResumeLayout(false);
             this.guna2Panel1.PerformLayout();
             this.guna2Panel2.ResumeLayout(false);

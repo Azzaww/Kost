@@ -18,10 +18,10 @@ namespace Kost_SiguraGura
         public PembayaranForm()
         {
             InitializeComponent();
-            this.Load += PembayaranForm_Load;
+            this.Load += PaymentForm_Load;
         }
 
-        private void PembayaranForm_Load(object sender, EventArgs e)
+        private void PaymentForm_Load(object sender, EventArgs e)
         {
             if (Session.UserRole?.ToLower() == "admin")
             {
@@ -120,6 +120,11 @@ namespace Kost_SiguraGura
         public void RefreshData()
         {
             LoadPayments();
+        }
+
+        private void PaymentForm_Load_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

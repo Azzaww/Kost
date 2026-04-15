@@ -120,7 +120,6 @@
     </Compile>
     <Compile Include="Kamar.cs" />
     <Compile Include="LoginRequest.cs" />
-    <Compile Include="PaymentResponse.cs" />
     <Compile Include="PembayaranDetail.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,6 +132,7 @@
     <Compile Include="PembayaranForm.Designer.cs">
       <DependentUpon>PembayaranForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PaymentResponse.cs" />
     <Compile Include="Penyewa.cs" />
     <Compile Include="PenyewaDetail.cs">
       <SubType>Form</SubType>
@@ -181,9 +181,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GalleryForm.resx">
       <DependentUpon>GalleryForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PembayaranDetail.resx">
-      <DependentUpon>PembayaranDetail.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PembayaranForm.resx">
       <DependentUpon>PembayaranForm.cs</DependentUpon>

@@ -296,7 +296,6 @@
             this.guna2Button2.FillColor = System.Drawing.Color.White;
             this.guna2Button2.Font = new System.Drawing.Font("Inter", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.guna2Button2.ForeColor = System.Drawing.Color.Gray;
-            this.guna2Button2.Image = null;
             this.guna2Button2.Location = new System.Drawing.Point(152, 94);
             this.guna2Button2.Name = "guna2Button2";
             this.guna2Button2.Size = new System.Drawing.Size(91, 29);
@@ -375,7 +374,7 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(872, 254);
             this.tableLayoutPanel2.TabIndex = 10;
             // 
-            // PembayaranForm
+            // PaymentForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -384,8 +383,9 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.guna2HtmlLabel3);
             this.Controls.Add(this.guna2HtmlLabel1);
-            this.Name = "PembayaranForm";
+            this.Name = "PaymentForm";
             this.Size = new System.Drawing.Size(921, 544);
+            this.Load += new System.EventHandler(this.PaymentForm_Load_1);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.guna2Panel1.ResumeLayout(false);
             this.guna2Panel1.PerformLayout();
