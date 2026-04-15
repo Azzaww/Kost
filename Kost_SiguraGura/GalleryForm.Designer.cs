@@ -267,6 +267,7 @@
             this.Controls.Add(this.guna2HtmlLabel1);
             this.Name = "GalleryForm";
             this.Size = new System.Drawing.Size(822, 588);
+            this.Load += new System.EventHandler(this.GalleryForm_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.guna2Panel1.ResumeLayout(false);
             this.guna2Panel1.PerformLayout();

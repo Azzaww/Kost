@@ -13,19 +13,33 @@ using System.Windows.Forms;
 
 namespace Kost_SiguraGura
 {
-    public partial class DataPenyewa : UserControl
+    public partial class DataPenyewa : System.Windows.Forms.UserControl
     {
         private BindingList<Penyewa> bindingListPenyewa = new BindingList<Penyewa>();
         private List<Penyewa> fullListPenyewa = new List<Penyewa>();
+
+        private int currentPage = 1;
+        private int currentLimit = 20;
+        private int totalPages = 1;
+        private string currentSearchKeyword = "";
+        private string currentRoleFilter = "";
+
         public DataPenyewa()
         {
             InitializeComponent();
+            SetupStatusComboBox();
         }
 
         private void DataPenyewa_Load(object sender, EventArgs e)
         {
             if (Session.UserRole?.ToLower() == "admin")
             {
+                // Wire up event handler untuk dropdown status
+                StatusComboBox1.SelectedIndexChanged += StatusComboBox1_SelectedIndexChanged;
+
+                // Set default selection
+                StatusComboBox1.SelectedIndex = 0; // "All Status"
+
                 LoadDataPenyewa();
             }
             else
@@ -34,87 +48,143 @@ namespace Kost_SiguraGura
             }
         }
 
+        /// <summary>
+        /// Setup ComboBox Status dengan mapping yang sesuai
+        /// </summary>
+        private void SetupStatusComboBox()
+        {
+            // Items sudah ditambahkan di Designer
+            // StatusComboBox1 memiliki items: "All Status", "Active", "Non Active", "Guest Users"
+        }
+
         private async void LoadDataPenyewa()
         {
             try
             {
-                string url = "https://rahmatzaw.elarisnoir.my.id/api/tenants";
+                currentPage = 1;
+                currentSearchKeyword = "";
+                currentRoleFilter = "";
 
-                // Memakai ApiClient.Client agar cookie login ikut terkirim
-                HttpResponseMessage response = await ApiClient.Client.GetAsync(url);
+                var response = await ApiClient.GetTenants(currentPage, currentLimit, currentSearchKeyword, currentRoleFilter);
 
-                if (response.IsSuccessStatusCode)
+                if (response?.Data != null)
                 {
-                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    fullListPenyewa = response.Data;
+                    totalPages = response.Meta?.TotalPages ?? 1;
 
-                    // Kita bongkar pakai JObject/JArray biar lebih sakti
-                    var result = Newtonsoft.Json.Linq.JToken.Parse(jsonResponse);
-                    Newtonsoft.Json.Linq.JToken listPenyewaRaw = null;
-
-                    // Cek: Apakah JSON-nya langsung list [{},{}] ?
-                    if (result is Newtonsoft.Json.Linq.JArray)
-                    {
-                        listPenyewaRaw = result;
-                    }
-                    // Atau dibungkus object {"tenants": []} atau {"penyewas": []} ?
-                    else
-                    {
-                        listPenyewaRaw = result["tenants"] ?? result["penyewas"] ?? result["data"];
-                    }
-
-                    if (listPenyewaRaw != null)
-                    {
-                        // Convert data mentah tadi ke List<Penyewa>
-                        fullListPenyewa = listPenyewaRaw.ToObject<List<Penyewa>>();
-
-                        this.Invoke((MethodInvoker)delegate {
-                            bindingListPenyewa = new BindingList<Penyewa>(fullListPenyewa);
-                            dataGridView1.DataSource = null;
-                            dataGridView1.DataSource = bindingListPenyewa;
-
-                            // Supaya grid otomatis update tampilan
-                            dataGridView1.Refresh();
-                        });
-                    }
-                    else
-                    {
-                        // Jika masih gagal, kita intip isi JSON-nya
-                        MessageBox.Show("Data tidak ketemu di JSON. Isi aslinya:\n" + jsonResponse);
-                    }
-                }
-                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                {
-                    MessageBox.Show("Sesi login habis atau tidak sah. Silakan login ulang.");
+                    this.Invoke((MethodInvoker)delegate {
+                        bindingListPenyewa = new BindingList<Penyewa>(fullListPenyewa);
+                        dataGridView1.DataSource = null;
+                        dataGridView1.DataSource = bindingListPenyewa;
+                        dataGridView1.Refresh();
+                    });
                 }
                 else
                 {
-                    MessageBox.Show("Gagal ambil data. Status: " + response.StatusCode);
+                    MessageBox.Show("Data tenant tidak ditemukan atau response format tidak sesuai.");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error saat bongkar data: " + ex.Message);
+                MessageBox.Show("Error saat mengambil data tenant: " + ex.Message);
             }
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
-            string keyword = txtSearch.Text.ToLower().Trim();
+            currentSearchKeyword = txtSearch.Text.Trim();
+            currentPage = 1;
+            LoadDataWithSearch();
+        }
 
-            if (string.IsNullOrEmpty(keyword))
+        private async void LoadDataWithSearch()
+        {
+            try
             {
-                bindingListPenyewa = new BindingList<Penyewa>(fullListPenyewa);
+                var response = await ApiClient.GetTenants(currentPage, currentLimit, currentSearchKeyword, currentRoleFilter);
+
+                if (response?.Data != null)
+                {
+                    fullListPenyewa = response.Data;
+                    totalPages = response.Meta?.TotalPages ?? 1;
+
+                    this.Invoke((MethodInvoker)delegate {
+                        bindingListPenyewa = new BindingList<Penyewa>(fullListPenyewa);
+                        dataGridView1.DataSource = null;
+                        dataGridView1.DataSource = bindingListPenyewa;
+                        dataGridView1.Refresh();
+                    });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var filtered = fullListPenyewa.Where(p =>
-                    (p.NAMA_LENGKAP != null && p.NAMA_LENGKAP.ToLower().Contains(keyword))
-                ).ToList();
-
-                bindingListPenyewa = new BindingList<Penyewa>(filtered);
+                MessageBox.Show("Error saat search: " + ex.Message);
             }
+        }
 
-            dataGridView1.DataSource = bindingListPenyewa;
+        /// <summary>
+        /// Event handler untuk dropdown status - filter data berdasarkan status yang dipilih
+        /// </summary>
+        private void StatusComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                string selectedStatus = StatusComboBox1.SelectedItem?.ToString() ?? "All Status";
+
+                // Map UI dropdown values ke API role filter yang benar
+                string roleFilter = "";
+
+                if (selectedStatus == "All Status")
+                {
+                    roleFilter = ""; // Tampilkan semua tenant
+                }
+                else if (selectedStatus == "Active")
+                {
+                    roleFilter = "tenant"; // Active Tenants = role "tenant"
+                }
+                else if (selectedStatus == "Non Active")
+                {
+                    roleFilter = "non_active"; // Suspended tenants
+                }
+                else if (selectedStatus == "Guest Users")
+                {
+                    roleFilter = "guest"; // Guest users belum booking
+                }
+
+                currentRoleFilter = roleFilter;
+                currentPage = 1;
+
+                // Trigger data load dengan filter baru
+                LoadDataWithSearch();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error saat filter status: " + ex.Message);
+            }
+        }
+
+        // Event handler untuk row double-click - membuka TenantDetailForm
+        private void DataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < bindingListPenyewa.Count)
+            {
+                Penyewa selectedTenant = bindingListPenyewa[e.RowIndex];
+                TenantDetailForm detailForm = new TenantDetailForm(selectedTenant, this);
+                detailForm.ShowDialog();
+            }
+        }
+
+        // Method publik untuk refresh data ketika dipanggil dari TenantDetailForm
+        public void RefreshTenantData()
+        {
+            LoadDataPenyewa();
+        }
+
+        // Event handler untuk suspend button (jika ada di datagrid)
+        public void SetupDataGridColumns()
+        {
+            // Bisa ditambahkan button column untuk suspend jika diperlukan
+            // Tapi karena anda bilang jangan ubah UI, kita skip ini untuk saat ini
         }
     }
 }

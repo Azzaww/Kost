@@ -6,3 +6,6 @@
 *.suo
 *.userosscache
 *.sln.docstates
+
+# Analysis files
+ANALISIS_ADDKAMAR_CS.md

@@ -53,6 +53,8 @@
             this.guna2Panel7 = new Guna.UI2.WinForms.Guna2Panel();
             this.lblMethod = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.guna2HtmlLabel9 = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            this.btnConfirm = new Guna.UI2.WinForms.Guna2Button();
+            this.btnReject = new Guna.UI2.WinForms.Guna2Button();
             this.guna2Panel1.SuspendLayout();
             this.guna2Panel2.SuspendLayout();
             this.guna2Panel8.SuspendLayout();
@@ -352,12 +354,52 @@
             this.guna2HtmlLabel9.TabIndex = 15;
             this.guna2HtmlLabel9.Text = "METHOD";
             // 
+            // btnConfirm
+            // 
+            this.btnConfirm.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(197)))), ((int)(((byte)(94)))));
+            this.btnConfirm.BorderRadius = 15;
+            this.btnConfirm.BorderThickness = 1;
+            this.btnConfirm.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnConfirm.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btnConfirm.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btnConfirm.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btnConfirm.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(197)))), ((int)(((byte)(94)))));
+            this.btnConfirm.Font = new System.Drawing.Font("Inter", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnConfirm.ForeColor = System.Drawing.Color.White;
+            this.btnConfirm.Location = new System.Drawing.Point(50, 600);
+            this.btnConfirm.Name = "btnConfirm";
+            this.btnConfirm.Size = new System.Drawing.Size(150, 45);
+            this.btnConfirm.TabIndex = 20;
+            this.btnConfirm.Text = "Confirm";
+            this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
+            // 
+            // btnReject
+            // 
+            this.btnReject.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
+            this.btnReject.BorderRadius = 15;
+            this.btnReject.BorderThickness = 1;
+            this.btnReject.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnReject.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btnReject.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btnReject.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btnReject.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
+            this.btnReject.Font = new System.Drawing.Font("Inter", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnReject.ForeColor = System.Drawing.Color.White;
+            this.btnReject.Location = new System.Drawing.Point(280, 600);
+            this.btnReject.Name = "btnReject";
+            this.btnReject.Size = new System.Drawing.Size(150, 45);
+            this.btnReject.TabIndex = 21;
+            this.btnReject.Text = "Reject";
+            this.btnReject.Click += new System.EventHandler(this.btnReject_Click);
+            // 
             // PembayaranDetail
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(474, 485);
+            this.ClientSize = new System.Drawing.Size(474, 700);
+            this.Controls.Add(this.btnReject);
+            this.Controls.Add(this.btnConfirm);
             this.Controls.Add(this.guna2Panel7);
             this.Controls.Add(this.guna2Panel6);
             this.Controls.Add(this.guna2Panel5);
@@ -371,6 +413,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "PembayaranDetail";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Load += new System.EventHandler(this.PembayaranDetail_Load);
             this.guna2Panel1.ResumeLayout(false);
             this.guna2Panel1.PerformLayout();
             this.guna2Panel2.ResumeLayout(false);
@@ -419,5 +462,7 @@
         private Guna.UI2.WinForms.Guna2Panel guna2Panel7;
         private Guna.UI2.WinForms.Guna2HtmlLabel lblMethod;
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel9;
+        private Guna.UI2.WinForms.Guna2Button btnConfirm;
+        private Guna.UI2.WinForms.Guna2Button btnReject;
     }
 }

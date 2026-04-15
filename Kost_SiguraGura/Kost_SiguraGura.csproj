@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -61,6 +61,12 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="itextsharp, Version=5.5.13.3, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13.3\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375a87e7ee5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddGallery.cs">
@@ -93,6 +99,12 @@
     </Compile>
     <Compile Include="DataPenyewa.Designer.cs">
       <DependentUpon>DataPenyewa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditKamar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditKamar.Designer.cs">
+      <DependentUpon>EditKamar.cs</DependentUpon>
     </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -142,6 +154,12 @@
     </Compile>
     <Compile Include="Sidebar.Designer.cs">
       <DependentUpon>Sidebar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TenantDetailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TenantDetailForm.Designer.cs">
+      <DependentUpon>TenantDetailForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="AddGallery.resx">
       <DependentUpon>AddGallery.cs</DependentUpon>
