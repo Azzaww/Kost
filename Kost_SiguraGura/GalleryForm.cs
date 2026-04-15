@@ -25,6 +25,10 @@ namespace Kost_SiguraGura
 
         private void GalleryForm_Load(object sender, EventArgs e)
         {
+            // Hide dummy panels - they are only for design preview
+            this.guna2Panel1.Visible = false;
+            this.guna2Panel2.Visible = false;
+
             LoadGalleries();
 
             // Wire up events
