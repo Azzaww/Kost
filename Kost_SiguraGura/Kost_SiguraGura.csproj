@@ -189,6 +189,9 @@
     <EmbeddedResource Include="GalleryForm.resx">
       <DependentUpon>GalleryForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PaymentCardControl.resx">
+      <DependentUpon>PaymentCardControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PembayaranForm.resx">
       <DependentUpon>PembayaranForm.cs</DependentUpon>
     </EmbeddedResource>

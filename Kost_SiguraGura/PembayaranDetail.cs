@@ -13,24 +13,24 @@ using System.Net.Http;
 
 namespace Kost_SiguraGura
 {
-    public partial class PaymentDetail : Form
+    public partial class PembayaranDetail : Form
     {
         private Pembayaran currentPayment;
         private PembayaranForm parentForm;
 
-        public PaymentDetail()
+        public PembayaranDetail()
         {
             InitializeComponent();
         }
 
-        public PaymentDetail(Pembayaran payment, PembayaranForm parent)
+        public PembayaranDetail(Pembayaran payment, PembayaranForm parent)
         {
             InitializeComponent();
             currentPayment = payment;
             parentForm = parent;
         }
 
-        private void PaymentDetail_Load(object sender, EventArgs e)
+        private void PembayaranDetail_Load(object sender, EventArgs e)
         {
             if (currentPayment != null)
             {
