@@ -152,9 +152,25 @@ namespace Kost_SiguraGura
         /// </summary>
         private void dataGridView1_CellMouseMove(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (e.ColumnIndex == 1 || dataGridView1.Columns[e.ColumnIndex]?.Name == "THUMBNAIL")
+            // Validasi: e.ColumnIndex harus >= 0 (bukan -1 saat mouse di luar area)
+            if (e.ColumnIndex < 0 || e.RowIndex < 0)
             {
-                dataGridView1.Cursor = Cursors.Hand; // Hand cursor untuk clickable
+                dataGridView1.Cursor = Cursors.Default;
+                return;
+            }
+
+            // Check apakah column index valid dan column memiliki nama "THUMBNAIL"
+            if (e.ColumnIndex < dataGridView1.Columns.Count)
+            {
+                var column = dataGridView1.Columns[e.ColumnIndex];
+                if (column?.Name == "THUMBNAIL" || e.ColumnIndex == 1)
+                {
+                    dataGridView1.Cursor = Cursors.Hand; // Hand cursor untuk clickable
+                }
+                else
+                {
+                    dataGridView1.Cursor = Cursors.Default;
+                }
             }
             else
             {

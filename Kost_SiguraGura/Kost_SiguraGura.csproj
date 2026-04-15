@@ -120,6 +120,13 @@
     </Compile>
     <Compile Include="Kamar.cs" />
     <Compile Include="LoginRequest.cs" />
+    <Compile Include="PaymentCardControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PaymentCardControl.Designer.cs">
+      <DependentUpon>PaymentCardControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentResponse.cs" />
     <Compile Include="PembayaranDetail.cs">
       <SubType>Form</SubType>
     </Compile>
