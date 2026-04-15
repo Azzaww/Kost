@@ -931,6 +931,7 @@
             this.Controls.Add(this.guna2HtmlLabel1);
             this.Name = "Report";
             this.Size = new System.Drawing.Size(972, 1253);
+            this.Load += new System.EventHandler(this.Report_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.guna2Panel4.ResumeLayout(false);
             this.guna2Panel4.PerformLayout();
