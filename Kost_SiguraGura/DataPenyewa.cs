@@ -37,6 +37,9 @@ namespace Kost_SiguraGura
                 // Wire up event handler untuk dropdown status
                 StatusComboBox1.SelectedIndexChanged += StatusComboBox1_SelectedIndexChanged;
 
+                // ✅ FIX Issue #1: Register CellDoubleClick event handler untuk open detail form
+                dataGridView1.CellDoubleClick += DataGridView1_CellDoubleClick;
+
                 // Set default selection
                 StatusComboBox1.SelectedIndex = 0; // "All Status"
 

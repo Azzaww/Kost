@@ -9,7 +9,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Collections.Specialized.BitVector32;
 
 namespace Kost_SiguraGura
 {
@@ -67,7 +66,27 @@ namespace Kost_SiguraGura
                     if (userData != null && userData.HasValues)
                     {
                         Session.UserId = (long)(userData["id"] ?? 0);
-                        Session.UserRole = userData["role"]?.ToString() ?? "admin";
+
+                        // ✅ FIX Issue #3: CRITICAL - Remove default "admin" role
+                        // Validate role is present and has valid value
+                        string userRole = userData["role"]?.ToString();
+                        if (string.IsNullOrEmpty(userRole))
+                        {
+                            MessageBox.Show("❌ SECURITY ERROR: User role tidak ditemukan dalam response dari server.\n\nTidak dapat melanjutkan login untuk alasan keamanan.", 
+                                "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        // Validate role is one of the expected values
+                        string roleLower = userRole.ToLower();
+                        if (roleLower != "admin" && roleLower != "tenant" && roleLower != "guest" && roleLower != "non_active")
+                        {
+                            MessageBox.Show($"❌ SECURITY ERROR: Invalid user role '{userRole}' received from server.\n\nTidak dapat melanjutkan login untuk alasan keamanan.", 
+                                "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        Session.UserRole = userRole;
                         Session.Username = userData["username"]?.ToString() ?? txtUsername.Text;
 
                         Sidebar main = new Sidebar();

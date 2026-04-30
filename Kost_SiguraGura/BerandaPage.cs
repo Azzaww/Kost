@@ -67,6 +67,7 @@ namespace Kost_SiguraGura
 
         /// <summary>
         /// Load payments data dari API
+        /// ✅ FIX Issue #7: Add JSON parsing validation
         /// </summary>
         private async Task LoadPaymentsAsync()
         {
@@ -78,25 +79,49 @@ namespace Kost_SiguraGura
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    var result = Newtonsoft.Json.Linq.JToken.Parse(jsonResponse);
 
-                    Newtonsoft.Json.Linq.JToken listRaw = result is Newtonsoft.Json.Linq.JArray ? result : (result["pembayarans"] ?? result["data"] ?? result);
-
-                    if (listRaw != null)
+                    // ✅ Validate JSON response is not empty
+                    if (string.IsNullOrWhiteSpace(jsonResponse))
                     {
-                        allPayments = listRaw.ToObject<List<Pembayaran>>() ?? new List<Pembayaran>();
-                        System.Diagnostics.Debug.WriteLine($"✅ Loaded {allPayments.Count} payments");
+                        System.Diagnostics.Debug.WriteLine("⚠️ API returned empty response for payments");
+                        allPayments = new List<Pembayaran>();
+                        return;
                     }
+
+                    try
+                    {
+                        var result = Newtonsoft.Json.Linq.JToken.Parse(jsonResponse);
+
+                        Newtonsoft.Json.Linq.JToken listRaw = result is Newtonsoft.Json.Linq.JArray ? result : (result["pembayarans"] ?? result["data"] ?? result);
+
+                        if (listRaw != null)
+                        {
+                            allPayments = listRaw.ToObject<List<Pembayaran>>() ?? new List<Pembayaran>();
+                            System.Diagnostics.Debug.WriteLine($"✅ Loaded {allPayments.Count} payments");
+                        }
+                    }
+                    catch (Newtonsoft.Json.JsonException jsonEx)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"❌ JSON parsing error for payments: {jsonEx.Message}");
+                        allPayments = new List<Pembayaran>();
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"❌ Failed to load payments: HTTP {response.StatusCode}");
+                    allPayments = new List<Pembayaran>();
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"❌ Error loading payments: {ex.Message}");
+                allPayments = new List<Pembayaran>();
             }
         }
 
         /// <summary>
         /// Load rooms data dari API
+        /// ✅ FIX Issue #7: Add JSON parsing validation
         /// </summary>
         private async Task LoadRoomsAsync()
         {
@@ -108,20 +133,43 @@ namespace Kost_SiguraGura
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    var result = Newtonsoft.Json.Linq.JToken.Parse(jsonResponse);
 
-                    Newtonsoft.Json.Linq.JToken listRaw = result is Newtonsoft.Json.Linq.JArray ? result : (result["kamars"] ?? result["data"] ?? result);
-
-                    if (listRaw != null)
+                    // ✅ Validate JSON response is not empty
+                    if (string.IsNullOrWhiteSpace(jsonResponse))
                     {
-                        allRooms = listRaw.ToObject<List<Kamar>>() ?? new List<Kamar>();
-                        System.Diagnostics.Debug.WriteLine($"✅ Loaded {allRooms.Count} rooms");
+                        System.Diagnostics.Debug.WriteLine("⚠️ API returned empty response for rooms");
+                        allRooms = new List<Kamar>();
+                        return;
                     }
+
+                    try
+                    {
+                        var result = Newtonsoft.Json.Linq.JToken.Parse(jsonResponse);
+
+                        Newtonsoft.Json.Linq.JToken listRaw = result is Newtonsoft.Json.Linq.JArray ? result : (result["kamars"] ?? result["data"] ?? result);
+
+                        if (listRaw != null)
+                        {
+                            allRooms = listRaw.ToObject<List<Kamar>>() ?? new List<Kamar>();
+                            System.Diagnostics.Debug.WriteLine($"✅ Loaded {allRooms.Count} rooms");
+                        }
+                    }
+                    catch (Newtonsoft.Json.JsonException jsonEx)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"❌ JSON parsing error for rooms: {jsonEx.Message}");
+                        allRooms = new List<Kamar>();
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"❌ Failed to load rooms: HTTP {response.StatusCode}");
+                    allRooms = new List<Kamar>();
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"❌ Error loading rooms: {ex.Message}");
+                allRooms = new List<Kamar>();
             }
         }
 
@@ -129,61 +177,60 @@ namespace Kost_SiguraGura
         /// Update KPI Cards (4 stat cards) dengan data terbaru dari API
         /// Card 1: Total Income, Card 2: Active Tenants
         /// Card 3: Available Rooms, Card 4: Pending Payments
+        /// ✅ FIX Issue #6: Simplified async pattern - remove unnecessary Invoke
         /// </summary>
         private void UpdateKPICards()
         {
-            this.Invoke((MethodInvoker)delegate {
-                try
-                {
-                    // ===== CARD 1: TOTAL INCOME =====
-                    // Sum semua payments yang statusnya "Confirmed"
-                    decimal totalRevenue = allPayments
-                        .Where(p => p.StatusPembayaran != null && 
-                                    p.StatusPembayaran.Equals("Confirmed", StringComparison.OrdinalIgnoreCase))
-                        .Sum(p => p.JumlahBayar);
-                    lblIncome.Text = FormatKeRupiahSingkat((long)totalRevenue);
+            try
+            {
+                // ===== CARD 1: TOTAL INCOME =====
+                // Sum semua payments yang statusnya "Confirmed"
+                decimal totalRevenue = allPayments
+                    .Where(p => p.StatusPembayaran != null && 
+                                p.StatusPembayaran.Equals("Confirmed", StringComparison.OrdinalIgnoreCase))
+                    .Sum(p => p.JumlahBayar);
+                lblIncome.Text = FormatKeRupiahSingkat((long)totalRevenue);
 
-                    // ===== CARD 2: ACTIVE TENANTS =====
-                    // Count distinct tenants dari pemesanan yang active
-                    int activeTenants = allPayments
-                        .Where(p => p.Pemesanan != null && 
-                                    p.Pemesanan.StatusPemesanan != null &&
-                                    p.Pemesanan.StatusPemesanan.Equals("Active", StringComparison.OrdinalIgnoreCase))
-                        .Select(p => p.Pemesanan.PenyewaId)
-                        .Distinct()
-                        .Count();
-                    guna2HtmlLabel13.Text = activeTenants.ToString();
-                    guna2HtmlLabel16.Text = $"Total {activeTenants} active tenant(s)";
+                // ===== CARD 2: ACTIVE TENANTS =====
+                // Count distinct tenants dari pemesanan yang active
+                int activeTenants = allPayments
+                    .Where(p => p.Pemesanan != null && 
+                                p.Pemesanan.StatusPemesanan != null &&
+                                p.Pemesanan.StatusPemesanan.Equals("Active", StringComparison.OrdinalIgnoreCase))
+                    .Select(p => p.Pemesanan.PenyewaId)
+                    .Distinct()
+                    .Count();
+                guna2HtmlLabel13.Text = activeTenants.ToString();
+                guna2HtmlLabel16.Text = $"Total {activeTenants} active tenant(s)";
 
-                    // ===== CARD 3: AVAILABLE ROOMS =====
-                    // Count rooms dengan status "Tersedia" atau "Available"
-                    int availableRooms = allRooms
-                        .Where(r => r.STATUS != null && 
-                                   (r.STATUS.Equals("Tersedia", StringComparison.OrdinalIgnoreCase) ||
-                                    r.STATUS.Equals("Available", StringComparison.OrdinalIgnoreCase)))
-                        .Count();
-                    int totalRooms = allRooms.Count;
-                    guna2HtmlLabel14.Text = availableRooms.ToString();
-                    guna2HtmlLabel17.Text = $"From {totalRooms} room(s)";
+                // ===== CARD 3: AVAILABLE ROOMS =====
+                // Count rooms dengan status "Tersedia" atau "Available"
+                int availableRooms = allRooms
+                    .Where(r => r.STATUS != null && 
+                               (r.STATUS.Equals("Tersedia", StringComparison.OrdinalIgnoreCase) ||
+                                r.STATUS.Equals("Available", StringComparison.OrdinalIgnoreCase)))
+                    .Count();
+                int totalRooms = allRooms.Count;
+                guna2HtmlLabel14.Text = availableRooms.ToString();
+                guna2HtmlLabel17.Text = $"From {totalRooms} room(s)";
 
-                    // ===== CARD 4: PENDING PAYMENTS =====
-                    // Count payments dengan status "Pending"
-                    int pendingPayments = allPayments
-                        .Where(p => p.StatusPembayaran != null &&
-                                    p.StatusPembayaran.Equals("Pending", StringComparison.OrdinalIgnoreCase))
-                        .Count();
-                    guna2HtmlLabel15.Text = pendingPayments.ToString();
+                // ===== CARD 4: PENDING PAYMENTS =====
+                // Count payments dengan status "Pending"
+                int pendingPayments = allPayments
+                    .Where(p => p.StatusPembayaran != null &&
+                                p.StatusPembayaran.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+                    .Count();
+                guna2HtmlLabel15.Text = pendingPayments.ToString();
 
-                    string pendingStatus = pendingPayments == 0 ? "All bills paid" : $"{pendingPayments} payment(s) awaiting";
-                    guna2HtmlLabel18.Text = pendingStatus;
+                string pendingStatus = pendingPayments == 0 ? "All bills paid" : $"{pendingPayments} payment(s) awaiting";
+                guna2HtmlLabel18.Text = pendingStatus;
 
-                    System.Diagnostics.Debug.WriteLine($"✅ KPI Updated - Revenue: Rp{totalRevenue:N0}, Tenants: {activeTenants}, Available: {availableRooms}, Pending: {pendingPayments}");
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"❌ Error updating KPI cards: {ex.Message}");
-                }
-            });
+                System.Diagnostics.Debug.WriteLine($"✅ KPI Updated - Revenue: Rp{totalRevenue:N0}, Tenants: {activeTenants}, Available: {availableRooms}, Pending: {pendingPayments}");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"❌ Error updating KPI cards: {ex.Message}");
+            }
         }
 
         /// <summary>

@@ -185,46 +185,86 @@ namespace Kost_SiguraGura
                 try
                 {
                     string url = "https://rahmatzaw.elarisnoir.my.id/api/kamar";
+
+                    // ✅ FIX Issue #9: Add HTTP status code validation
                     HttpResponseMessage response = await client.GetAsync(url);
 
-                    if (response.IsSuccessStatusCode)
+                    if (!response.IsSuccessStatusCode)
                     {
-                        string jsonResponse = await response.Content.ReadAsStringAsync();
-                        var listData = JsonConvert.DeserializeObject<List<Kamar>>(jsonResponse);
+                        MessageBox.Show($"Gagal mengambil data kamar. Status: {response.StatusCode}", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
 
-                        if (listData != null)
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var listData = JsonConvert.DeserializeObject<List<Kamar>>(jsonResponse);
+
+                    if (listData != null)
+                    {
+                        fullListKamar.Clear(); // Bersihkan list cadangan
+
+                        // ✅ FIX Issue #8: Implement parallel image loading with concurrency limit
+                        // Load max 3 images in parallel to avoid overwhelming the server
+                        int maxParallelTasks = 3;
+                        var imageLoadTasks = new List<Task>();
+
+                        foreach (var k in listData)
                         {
-                            fullListKamar.Clear(); // Bersihkan list cadangan
+                            fullListKamar.Add(k); // Add immediately untuk UI response
 
-                            foreach (var k in listData)
+                            if (!string.IsNullOrEmpty(k.ThumbnailUrl))
                             {
-                                if (!string.IsNullOrEmpty(k.ThumbnailUrl))
+                                // Create task for image loading
+                                var loadImageTask = LoadImageAsync(client, k);
+
+                                imageLoadTasks.Add(loadImageTask);
+
+                                // If we have max parallel tasks, wait for one to complete
+                                if (imageLoadTasks.Count >= maxParallelTasks)
                                 {
-                                    try
-                                    {
-                                        byte[] imageBytes = await client.GetByteArrayAsync(k.ThumbnailUrl);
-                                        using (var ms = new System.IO.MemoryStream(imageBytes))
-                                        {
-                                            k.THUMBNAIL = new Bitmap(System.Drawing.Image.FromStream(ms));
-                                        }
-                                    }
-                                    catch { k.THUMBNAIL = null; }
+                                    await Task.WhenAny(imageLoadTasks);
+                                    imageLoadTasks.RemoveAll(t => t.IsCompleted);
                                 }
-                                fullListKamar.Add(k); // Simpan ke list cadangan
                             }
-
-                            // Tampilkan data menggunakan fungsi filter agar sinkron dengan status awal combobox
-                            ApplyFilters();
-
-                            if (dataGridView1.Columns["ThumbnailUrl"] != null)
-                                dataGridView1.Columns["ThumbnailUrl"].Visible = false;
                         }
+
+                        // Wait for remaining tasks
+                        if (imageLoadTasks.Count > 0)
+                        {
+                            await Task.WhenAll(imageLoadTasks);
+                        }
+
+                        // Tampilkan data menggunakan fungsi filter agar sinkron dengan status awal combobox
+                        ApplyFilters();
+
+                        if (dataGridView1.Columns["ThumbnailUrl"] != null)
+                            dataGridView1.Columns["ThumbnailUrl"].Visible = false;
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Terjadi kesalahan: " + ex.Message);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Load image asynchronously for a single room
+        /// </summary>
+        private async Task LoadImageAsync(HttpClient client, Kamar kamar)
+        {
+            try
+            {
+                byte[] imageBytes = await client.GetByteArrayAsync(kamar.ThumbnailUrl);
+                using (var ms = new System.IO.MemoryStream(imageBytes))
+                {
+                    kamar.THUMBNAIL = new Bitmap(System.Drawing.Image.FromStream(ms));
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"⚠️ Failed to load image for {kamar.ROOM}: {ex.Message}");
+                kamar.THUMBNAIL = null;
             }
         }
 

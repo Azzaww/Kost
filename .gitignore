@@ -7,5 +7,117 @@
 *.userosscache
 *.sln.docstates
 
-# Analysis files
+# ============================================
+# DOCUMENTATION & AUDIT FILES (Local Development)
+# ============================================
+# These are generated during development and code review but should not be committed
+# They are tracked locally for reference and debugging purposes only
+
+# Analysis & Audit Reports
 ANALISIS_ADDKAMAR_CS.md
+AUDIT_FINDINGS_DETAILED.md
+AUDIT_REPORT.md
+CRITICAL_FIXES_IMPLEMENTATION.md
+MAJOR_ISSUES_FIXES.md
+MINOR_ISSUES_AND_OPTIMIZATION.md
+FINAL_SUMMARY_AND_RECOMMENDATIONS.md
+QUICK_START_GUIDE.md
+AUDIT_DELIVERABLES_INDEX.md
+
+# Implementation Guides & Planning Documents
+LOCALIZATION_IMPLEMENTATION_GUIDE.md
+IMPLEMENTATION_PLAN.md
+*.implementation.md
+*_TODO.md
+*_NOTES.md
+DEVELOPER_NOTES.md
+DEBUGGING_NOTES.md
+RESEARCH.md
+TODO.md
+
+# Temporary Analysis & Draft Documents
+*_analysis.md
+*_report.md
+*.analysis.txt
+*.dev.md
+*.dev.txt
+*_dev.md
+CHANGELOG_DRAFT.md
+
+# Git & Repository Documentation (Local Reference Only)
+# These files are for LOCAL reference during development
+# They help explain git workflow but are not part of official project
+GIT_PUSH_GUIDELINES.md
+QUICK_GIT_CHECKLIST.md
+REPOSITORY_STRUCTURE.md
+DOCUMENTATION_INDEX.md
+COMPLETION_SUMMARY.md
+
+# ============================================
+# SYSTEM & IDE FILES
+# ============================================
+.DS_Store
+Thumbs.db
+.AppleDouble
+.LSOverride
+Desktop.ini
+ehthumbs.db
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Rider/IntelliJ
+.idea/
+*.sln.iml
+
+# ============================================
+# BUILD & DEPENDENCIES
+# ============================================
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# ============================================
+# DATABASE & CONFIGURATION (SENSITIVE)
+# ============================================
+*.db
+*.sqlite
+*.sqlite3
+*.mdf
+*.ldf
+appsettings.Development.json
+appsettings.Local.json
+*.local.config
+*.private.config
+.env
+.env.local
+secrets/
+*.secrets
+.secrets/
+
+# ============================================
+# TEMPORARY FILES & LOGS
+# ============================================
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*~
+*.log
+TestResults/
+*.trx
+*_test_output/
+
+# ============================================
+# PERFORMANCE & CACHE
+# ============================================
+**/[Cc]ache/
+**/[Cc]ached/
+*.prof
+*.perf

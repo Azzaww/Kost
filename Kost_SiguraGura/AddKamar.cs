@@ -265,6 +265,31 @@ namespace Kost_SiguraGura
                     return false;
                 }
 
+                // ✅ FIX Issue #4: Add file size validation (max 5MB per image)
+                try
+                {
+                    FileInfo fileInfo = new FileInfo(selectedImagePaths[i]);
+                    long fileSizeBytes = fileInfo.Length;
+                    double fileSizeMB = fileSizeBytes / (1024.0 * 1024.0);
+                    const long MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
+
+                    if (fileSizeBytes > MAX_FILE_SIZE_BYTES)
+                    {
+                        MessageBox.Show($"❌ File gambar {i + 1} terlalu besar!\n\n" +
+                            $"Ukuran: {fileSizeMB:F2} MB\n" +
+                            $"Maksimal: 5 MB\n\n" +
+                            $"Silakan pilih gambar dengan ukuran lebih kecil.",
+                            "File Too Large", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"❌ Error checking file size untuk gambar {i + 1}: {ex.Message}",
+                        "File Size Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+
                 System.Diagnostics.Debug.WriteLine($"VALIDATION DEBUG: Image {i + 1} found and valid");
             }
 

@@ -21,6 +21,17 @@ namespace Kost_SiguraGura
         private const string BaseUrl = "https://rahmatzaw.elarisnoir.my.id/api";
 
         /// <summary>
+        /// Static constructor to initialize HttpClient timeout
+        /// ✅ FIX Issue #2: Set default timeout untuk prevent hanging requests
+        /// </summary>
+        static ApiClient()
+        {
+            // Set timeout ke 30 detik (consistent dengan GalleryForm)
+            // Jika request lebih lama dari ini, akan throw TaskCanceledException
+            Client.Timeout = TimeSpan.FromSeconds(30);
+        }
+
+        /// <summary>
         /// Get all payments from API
         /// Includes nested relations: Pemesanan (with Penyewa and Kamar)
         /// </summary>
