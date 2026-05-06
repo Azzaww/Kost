@@ -54,7 +54,7 @@
             this.guna2HtmlLabel3.Location = new System.Drawing.Point(31, 64);
             this.guna2HtmlLabel3.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel3.Name = "guna2HtmlLabel3";
-            this.guna2HtmlLabel3.Size = new System.Drawing.Size(320, 28);
+            this.guna2HtmlLabel3.Size = new System.Drawing.Size(247, 23);
             this.guna2HtmlLabel3.TabIndex = 8;
             this.guna2HtmlLabel3.Text = "Review and confirm tenant payments";
             this.guna2HtmlLabel3.UseWaitCursor = true;
@@ -67,7 +67,7 @@
             this.guna2HtmlLabel1.Location = new System.Drawing.Point(31, 27);
             this.guna2HtmlLabel1.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel1.Name = "guna2HtmlLabel1";
-            this.guna2HtmlLabel1.Size = new System.Drawing.Size(113, 40);
+            this.guna2HtmlLabel1.Size = new System.Drawing.Size(92, 34);
             this.guna2HtmlLabel1.TabIndex = 7;
             this.guna2HtmlLabel1.Text = "Payment";
             this.guna2HtmlLabel1.UseWaitCursor = true;
@@ -117,7 +117,7 @@
             this.guna2HtmlLabel16.Location = new System.Drawing.Point(25, 98);
             this.guna2HtmlLabel16.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel16.Name = "guna2HtmlLabel16";
-            this.guna2HtmlLabel16.Size = new System.Drawing.Size(157, 24);
+            this.guna2HtmlLabel16.Size = new System.Drawing.Size(124, 19);
             this.guna2HtmlLabel16.TabIndex = 14;
             this.guna2HtmlLabel16.Text = "Pending confirmation";
             this.guna2HtmlLabel16.UseWaitCursor = true;
@@ -125,12 +125,12 @@
             // guna2HtmlLabel4
             // 
             this.guna2HtmlLabel4.BackColor = System.Drawing.Color.Transparent;
-            this.guna2HtmlLabel4.Font = new System.Drawing.Font("Inter", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.guna2HtmlLabel4.Font = new System.Drawing.Font("Inter", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.guna2HtmlLabel4.ForeColor = System.Drawing.Color.White;
-            this.guna2HtmlLabel4.Location = new System.Drawing.Point(327, 20);
+            this.guna2HtmlLabel4.Location = new System.Drawing.Point(327, 9);
             this.guna2HtmlLabel4.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel4.Name = "guna2HtmlLabel4";
-            this.guna2HtmlLabel4.Size = new System.Drawing.Size(25, 50);
+            this.guna2HtmlLabel4.Size = new System.Drawing.Size(35, 70);
             this.guna2HtmlLabel4.TabIndex = 12;
             this.guna2HtmlLabel4.Text = "0";
             this.guna2HtmlLabel4.UseWaitCursor = true;
@@ -159,7 +159,7 @@
             this.guna2HtmlLabel7.Location = new System.Drawing.Point(32, 98);
             this.guna2HtmlLabel7.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel7.Name = "guna2HtmlLabel7";
-            this.guna2HtmlLabel7.Size = new System.Drawing.Size(152, 24);
+            this.guna2HtmlLabel7.Size = new System.Drawing.Size(122, 19);
             this.guna2HtmlLabel7.TabIndex = 14;
             this.guna2HtmlLabel7.Text = "Confirmed payments";
             this.guna2HtmlLabel7.UseWaitCursor = true;
@@ -167,12 +167,12 @@
             // guna2HtmlLabel5
             // 
             this.guna2HtmlLabel5.BackColor = System.Drawing.Color.Transparent;
-            this.guna2HtmlLabel5.Font = new System.Drawing.Font("Inter", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.guna2HtmlLabel5.Font = new System.Drawing.Font("Inter", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.guna2HtmlLabel5.ForeColor = System.Drawing.Color.White;
-            this.guna2HtmlLabel5.Location = new System.Drawing.Point(321, 20);
+            this.guna2HtmlLabel5.Location = new System.Drawing.Point(331, 4);
             this.guna2HtmlLabel5.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel5.Name = "guna2HtmlLabel5";
-            this.guna2HtmlLabel5.Size = new System.Drawing.Size(17, 50);
+            this.guna2HtmlLabel5.Size = new System.Drawing.Size(24, 70);
             this.guna2HtmlLabel5.TabIndex = 13;
             this.guna2HtmlLabel5.Text = "1";
             this.guna2HtmlLabel5.UseWaitCursor = true;
@@ -201,7 +201,7 @@
             this.guna2HtmlLabel8.Location = new System.Drawing.Point(32, 98);
             this.guna2HtmlLabel8.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel8.Name = "guna2HtmlLabel8";
-            this.guna2HtmlLabel8.Size = new System.Drawing.Size(140, 24);
+            this.guna2HtmlLabel8.Size = new System.Drawing.Size(112, 19);
             this.guna2HtmlLabel8.TabIndex = 14;
             this.guna2HtmlLabel8.Text = "Rejected payments";
             this.guna2HtmlLabel8.UseWaitCursor = true;
@@ -209,12 +209,12 @@
             // guna2HtmlLabel6
             // 
             this.guna2HtmlLabel6.BackColor = System.Drawing.Color.Transparent;
-            this.guna2HtmlLabel6.Font = new System.Drawing.Font("Inter", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.guna2HtmlLabel6.Font = new System.Drawing.Font("Inter", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.guna2HtmlLabel6.ForeColor = System.Drawing.Color.White;
-            this.guna2HtmlLabel6.Location = new System.Drawing.Point(320, 20);
+            this.guna2HtmlLabel6.Location = new System.Drawing.Point(327, 9);
             this.guna2HtmlLabel6.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel6.Name = "guna2HtmlLabel6";
-            this.guna2HtmlLabel6.Size = new System.Drawing.Size(25, 50);
+            this.guna2HtmlLabel6.Size = new System.Drawing.Size(35, 70);
             this.guna2HtmlLabel6.TabIndex = 13;
             this.guna2HtmlLabel6.Text = "0";
             this.guna2HtmlLabel6.UseWaitCursor = true;

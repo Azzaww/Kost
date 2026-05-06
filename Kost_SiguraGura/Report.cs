@@ -504,6 +504,7 @@ namespace Kost_SiguraGura
 
                 int yPosition = 5;
 
+
                 // Display each revenue breakdown card
                 foreach (var item in revenueData)
                 {
@@ -513,12 +514,14 @@ namespace Kost_SiguraGura
                     var cardPanel = new Guna.UI2.WinForms.Guna2Panel
                     {
                         BorderColor = System.Drawing.Color.FromArgb(230, 230, 230),
-                        BorderRadius = 4,
+                        BorderRadius = 8, // Sedikit lebih melengkung agar terlihat modern
                         BorderThickness = 1,
-                        FillColor = System.Drawing.Color.FromArgb(250, 250, 250), // Very light gray
+                        FillColor = System.Drawing.Color.FromArgb(250, 250, 250),
                         Location = new System.Drawing.Point(10, yPosition),
-                        Size = new System.Drawing.Size(guna2Panel10.Width - 20, 72),
-                        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+                        Width = guna2Panel10.ClientSize.Width - 45,
+                        Height = 75,
+                        Padding = new Padding(10), // KUNCI UTAMA: Isi kartu tidak akan keluar dari zona ini
+                        Anchor = AnchorStyles.Top | AnchorStyles.Left,
                         Visible = true
                     };
 
@@ -544,6 +547,7 @@ namespace Kost_SiguraGura
                         AutoSize = false,
                         Location = new System.Drawing.Point(cardPanel.Width - 95, 6),
                         Size = new System.Drawing.Size(85, 16),
+                        Anchor = AnchorStyles.Top | AnchorStyles.Right,
                         BackColor = System.Drawing.Color.Transparent,
                         Visible = true
                     };
@@ -565,11 +569,13 @@ namespace Kost_SiguraGura
                     // Progress bar (full width, minimal height)
                     var progressBar = new ProgressBar
                     {
-                        Location = new System.Drawing.Point(12, 40),
-                        Size = new System.Drawing.Size(cardPanel.Width - 24, 5),
+                        Location = new System.Drawing.Point(12, 48),
+                        Width = cardPanel.Width - 24,
+                        Height = 8,
                         BackColor = System.Drawing.Color.FromArgb(230, 230, 230),
                         ForeColor = System.Drawing.Color.FromArgb(245, 158, 11),
                         Value = (item.Total > 0) ? (int)((item.Occupied / (double)item.Total) * 100) : 0,
+                        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
                         Visible = true
                     };
                     cardPanel.Controls.Add(progressBar);
@@ -577,7 +583,7 @@ namespace Kost_SiguraGura
                     guna2Panel10.Controls.Add(cardPanel);
                     System.Diagnostics.Debug.WriteLine($"Added card at Y={yPosition}, Total controls in panel now: {guna2Panel10.Controls.Count}");
 
-                    yPosition += 77;
+                    yPosition += 85;
                 }
 
                 // Force panel refresh dan auto-layout
