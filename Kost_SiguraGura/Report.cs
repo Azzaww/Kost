@@ -18,6 +18,7 @@ namespace Kost_SiguraGura
     {
         private List<Pembayaran> allPayments = new List<Pembayaran>();
         private List<Kamar> allRooms = new List<Kamar>();
+        private DashboardStats currentStats = null;
         private DateTime selectedStartDate = DateTime.Now.AddMonths(-6);
         private DateTime selectedEndDate = DateTime.Now;
 
@@ -146,17 +147,134 @@ namespace Kost_SiguraGura
         {
             try
             {
+                System.Diagnostics.Debug.WriteLine("[LoadAllReportData] Starting initial data load...");
+
                 await Task.WhenAll(
+                    LoadDashboardStatsAsync(),
                     LoadPaymentsAsync(),
                     LoadRoomsAsync()
                 );
 
-                UpdateReportStatCards();
-                SetupCharts();
+                System.Diagnostics.Debug.WriteLine($"[LoadAllReportData] Data load completed - Stats loaded: {(currentStats != null)}, Payments: {allPayments.Count}, Rooms: {allRooms.Count}");
+
+                // Save debug log after loading
+                SaveDebugLog();
+
+                // Ensure UI update happens on UI thread
+                if (InvokeRequired)
+                {
+                    Invoke(new Action(() =>
+                    {
+                        UpdateReportStatCards();
+                        SetupCharts();
+                    }));
+                }
+                else
+                {
+                    UpdateReportStatCards();
+                    SetupCharts();
+                }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error loading report data: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[LoadAllReportData] Error loading report data: {ex.Message}\n{ex.StackTrace}");
+            }
+        }
+
+        /// <summary>
+        /// Save comprehensive debug log to Desktop
+        /// </summary>
+        private void SaveDebugLog()
+        {
+            try
+            {
+                string debugLog = $"========== REPORT DEBUG LOG ==========\n";
+                debugLog += $"Timestamp: {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}\n\n";
+
+                debugLog += $"========== LOADED DATA ==========\n";
+                debugLog += $"Total Payments: {allPayments.Count}\n";
+                debugLog += $"Total Rooms: {allRooms.Count}\n\n";
+
+                debugLog += $"========== PAYMENT BREAKDOWN ==========\n";
+                debugLog += $"Confirmed: {allPayments.Count(p => p.StatusPembayaran == "Confirmed" || p.StatusPembayaran == "confirmed")}\n";
+                debugLog += $"Pending: {allPayments.Count(p => p.StatusPembayaran == "Pending" || p.StatusPembayaran == "pending")}\n";
+                debugLog += $"Rejected: {allPayments.Count(p => p.StatusPembayaran == "Rejected" || p.StatusPembayaran == "rejected")}\n\n";
+
+                debugLog += $"========== REVENUE BREAKDOWN ==========\n";
+                var confirmedTotal = allPayments.Where(p => p.StatusPembayaran == "Confirmed" || p.StatusPembayaran == "confirmed").Sum(p => p.JumlahBayar);
+                var pendingTotal = allPayments.Where(p => p.StatusPembayaran == "Pending" || p.StatusPembayaran == "pending").Sum(p => p.JumlahBayar);
+                debugLog += $"Confirmed Total: {confirmedTotal} (Expected: 16000000)\n";
+                debugLog += $"Pending Total: {pendingTotal} (Expected: 5000000)\n";
+                debugLog += $"ALL Total: {allPayments.Sum(p => p.JumlahBayar)} (Expected: 21000000)\n\n";
+
+                debugLog += $"========== FIRST 10 PAYMENTS ==========\n";
+                foreach (var p in allPayments.Take(10))
+                {
+                    debugLog += $"ID: {p.Id} | Amount: {p.JumlahBayar} | Status: {p.StatusPembayaran} | Date: {p.TanggalBayar}\n";
+                }
+
+                string debugPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Report_Debug_Log.txt");
+                File.WriteAllText(debugPath, debugLog);
+                System.Diagnostics.Debug.WriteLine($"[SaveDebugLog] Debug log saved to: {debugPath}");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[SaveDebugLog] Error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Load dashboard statistics from /api/dashboard/stats endpoint
+        /// This endpoint provides pre-calculated metrics to avoid frontend calculation errors
+        /// </summary>
+        private async Task LoadDashboardStatsAsync()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("[LoadDashboardStatsAsync] Starting dashboard stats fetch...");
+                var response = await ApiClient.Client.GetAsync("https://rahmatzaw.elarisnoir.my.id/api/dashboard/stats");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    System.Diagnostics.Debug.WriteLine($"[LoadDashboardStatsAsync] Raw JSON response length: {content.Length} chars");
+                    System.Diagnostics.Debug.WriteLine($"[LoadDashboardStatsAsync] First 500 chars:\n{content.Substring(0, Math.Min(500, content.Length))}");
+
+                    try
+                    {
+                        currentStats = JsonConvert.DeserializeObject<DashboardStats>(content,
+                            new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+                        if (currentStats != null)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[LoadDashboardStatsAsync] ✓ SUCCESS! Stats loaded:");
+                            System.Diagnostics.Debug.WriteLine($"  - Total Revenue: {currentStats.TotalRevenue}");
+                            System.Diagnostics.Debug.WriteLine($"  - Pending Revenue: {currentStats.PendingRevenue}");
+                            System.Diagnostics.Debug.WriteLine($"  - Active Tenants: {currentStats.ActiveTenants}");
+                            System.Diagnostics.Debug.WriteLine($"  - Occupied Rooms: {currentStats.OccupiedRooms}/{currentStats.OccupiedRooms + currentStats.AvailableRooms}");
+                            System.Diagnostics.Debug.WriteLine($"  - Type Breakdown items: {currentStats.TypeBreakdown?.Count ?? 0}");
+                            System.Diagnostics.Debug.WriteLine($"  - Demographics items: {currentStats.Demographics?.Count ?? 0}");
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[LoadDashboardStatsAsync] ✗ Deserialization returned null");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[LoadDashboardStatsAsync] ✗ Deserialization error: {ex.Message}");
+                        System.Diagnostics.Debug.WriteLine($"[LoadDashboardStatsAsync] Exception: {ex.GetType().Name}");
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"[LoadDashboardStatsAsync] API returned error status: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[LoadDashboardStatsAsync] Error loading stats: {ex.Message}\n{ex.StackTrace}");
             }
         }
 
@@ -170,14 +288,42 @@ namespace Kost_SiguraGura
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    allPayments = JsonConvert.DeserializeObject<List<Pembayaran>>(content) ?? new List<Pembayaran>();
 
-                    System.Diagnostics.Debug.WriteLine($"[LoadPaymentsAsync] Successfully loaded {allPayments.Count} payments from API");
+                    System.Diagnostics.Debug.WriteLine($"[LoadPaymentsAsync] Raw JSON response length: {content.Length} chars");
+                    System.Diagnostics.Debug.WriteLine($"[LoadPaymentsAsync] Raw JSON response (first 1000 chars):\n{content.Substring(0, Math.Min(1000, content.Length))}");
 
-                    // Log first few payments for debugging
-                    foreach (var p in allPayments.Take(3))
+                    // Save raw JSON to file for inspection
+                    try
                     {
-                        System.Diagnostics.Debug.WriteLine($"  - Payment ID: {p.Id}, Status: {p.StatusPembayaran}, Amount: {p.JumlahBayar}, Date: {p.TanggalBayar}");
+                        string debugPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "API_Response_Debug.json");
+                        File.WriteAllText(debugPath, content);
+                        System.Diagnostics.Debug.WriteLine($"[LoadPaymentsAsync] Raw JSON saved to: {debugPath}");
+                    }
+                    catch { }
+
+                    // Use robust deserialization
+                    allPayments = SafeDeserializePayments(content);
+
+                    System.Diagnostics.Debug.WriteLine($"[LoadPaymentsAsync] *** RESULT: Successfully loaded {allPayments.Count} payments from API ***");
+
+                    // Log detailed breakdown
+                    if (allPayments.Count > 0)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[LoadPaymentsAsync] Payment breakdown:");
+                        System.Diagnostics.Debug.WriteLine($"  - Total items: {allPayments.Count}");
+                        System.Diagnostics.Debug.WriteLine($"  - Confirmed: {allPayments.Count(p => p.StatusPembayaran == "Confirmed" || p.StatusPembayaran == "confirmed")}");
+                        System.Diagnostics.Debug.WriteLine($"  - Pending: {allPayments.Count(p => p.StatusPembayaran == "Pending" || p.StatusPembayaran == "pending")}");
+                        System.Diagnostics.Debug.WriteLine($"  - Total Revenue (Confirmed): {allPayments.Where(p => p.StatusPembayaran == "Confirmed" || p.StatusPembayaran == "confirmed").Sum(p => p.JumlahBayar)}");
+
+                        System.Diagnostics.Debug.WriteLine($"[LoadPaymentsAsync] First 5 payments:");
+                        foreach (var p in allPayments.Take(5))
+                        {
+                            System.Diagnostics.Debug.WriteLine($"  ID: {p.Id}, Amount: {p.JumlahBayar}, Status: {p.StatusPembayaran}, Date: {p.TanggalBayar}");
+                        }
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[LoadPaymentsAsync] ❌ WARNING: NO PAYMENTS PARSED!");
                     }
                 }
                 else
@@ -187,7 +333,135 @@ namespace Kost_SiguraGura
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[LoadPaymentsAsync] Error loading payments: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[LoadPaymentsAsync] Error loading payments: {ex.Message}\n{ex.StackTrace}");
+            }
+        }
+
+        /// <summary>
+        /// Safely deserialize payment response from API - handles RAW ARRAY format (main format)
+        /// </summary>
+        private List<Pembayaran> SafeDeserializePayments(string jsonContent)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("[SafeDeserializePayments] ========== START PARSING ==========");
+                System.Diagnostics.Debug.WriteLine($"[SafeDeserializePayments] JSON Content Length: {jsonContent?.Length ?? 0} chars");
+                System.Diagnostics.Debug.WriteLine($"[SafeDeserializePayments] First 200 chars: {jsonContent?.Substring(0, Math.Min(200, jsonContent.Length))}...");
+
+                if (string.IsNullOrWhiteSpace(jsonContent))
+                {
+                    System.Diagnostics.Debug.WriteLine("[SafeDeserializePayments] ✗ JSON content is empty/null");
+                    return new List<Pembayaran>();
+                }
+
+                // ============================================
+                // PRIORITY 1: Try direct array (main format)
+                // ============================================
+                System.Diagnostics.Debug.WriteLine("[SafeDeserializePayments] Attempt 1: Parse as direct array...");
+                try
+                {
+                    var directArray = JsonConvert.DeserializeObject<List<Pembayaran>>(jsonContent, 
+                        new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+                    if (directArray != null)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[SafeDeserializePayments] ✓ SUCCESS! Direct array - {directArray.Count} items");
+
+                        // Log first 3 items for verification
+                        if (directArray.Count > 0)
+                        {
+                            System.Diagnostics.Debug.WriteLine("[SafeDeserializePayments] First 3 items:");
+                            foreach (var payment in directArray.Take(3))
+                            {
+                                System.Diagnostics.Debug.WriteLine($"  - ID: {payment.Id}, Amount: {payment.JumlahBayar}, Status: {payment.StatusPembayaran}");
+                            }
+                        }
+
+                        return directArray;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[SafeDeserializePayments] ✗ Direct array parsing failed: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine($"[SafeDeserializePayments] Exception detail: {ex.GetType().Name}");
+                }
+
+                // ============================================
+                // PRIORITY 2: Try wrapper formats
+                // ============================================
+                System.Diagnostics.Debug.WriteLine("[SafeDeserializePayments] Attempt 2: Parse as wrapper object...");
+                try
+                {
+                    var jToken = JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JToken>(jsonContent);
+
+                    if (jToken == null)
+                    {
+                        System.Diagnostics.Debug.WriteLine("[SafeDeserializePayments] ✗ JSON token is null");
+                        return new List<Pembayaran>();
+                    }
+
+                    // Try different wrapper keys in order
+                    string[] possibleKeys = { "data", "pembayarans", "payments", "payment", "list", "items", "result" };
+
+                    foreach (var key in possibleKeys)
+                    {
+                        try
+                        {
+                            var dataToken = jToken[key];
+                            if (dataToken != null)
+                            {
+                                System.Diagnostics.Debug.WriteLine($"[SafeDeserializePayments] Trying key '{key}' (type: {dataToken.Type})...");
+
+                                if (dataToken.Type == Newtonsoft.Json.Linq.JTokenType.Array)
+                                {
+                                    var payments = dataToken.ToObject<List<Pembayaran>>();
+                                    if (payments != null && payments.Count > 0)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine($"[SafeDeserializePayments] ✓ SUCCESS with key '{key}' - {payments.Count} items");
+                                        return payments;
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[SafeDeserializePayments] Key '{key}' failed: {ex.Message}");
+                        }
+                    }
+
+                    // If jToken itself is array
+                    if (jToken.Type == Newtonsoft.Json.Linq.JTokenType.Array)
+                    {
+                        try
+                        {
+                            var payments = jToken.ToObject<List<Pembayaran>>();
+                            if (payments != null && payments.Count > 0)
+                            {
+                                System.Diagnostics.Debug.WriteLine($"[SafeDeserializePayments] ✓ SUCCESS as jToken array - {payments.Count} items");
+                                return payments;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[SafeDeserializePayments] jToken array parsing failed: {ex.Message}");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[SafeDeserializePayments] Wrapper parsing critical error: {ex.Message}");
+                }
+
+                System.Diagnostics.Debug.WriteLine("[SafeDeserializePayments] ✗ ALL parsing attempts FAILED - returning empty list");
+                System.Diagnostics.Debug.WriteLine("[SafeDeserializePayments] ========== END PARSING ==========");
+                return new List<Pembayaran>();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[SafeDeserializePayments] CRITICAL ERROR: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[SafeDeserializePayments] StackTrace: {ex.StackTrace}");
+                System.Diagnostics.Debug.WriteLine("[SafeDeserializePayments] ========== END PARSING ==========");
+                return new List<Pembayaran>();
             }
         }
 
@@ -208,122 +482,233 @@ namespace Kost_SiguraGura
             }
         }
 
+        /// <summary>
+        /// Refresh report data dari API - digunakan untuk real-time update saat filter berubah
+        /// </summary>
+        private async Task RefreshReportDataAsync()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("[RefreshReportDataAsync] Starting data refresh from API...");
+
+                // Fetch latest data including dashboard stats
+                await Task.WhenAll(
+                    LoadDashboardStatsAsync(),
+                    LoadPaymentsAsync(),
+                    LoadRoomsAsync()
+                );
+
+                System.Diagnostics.Debug.WriteLine($"[RefreshReportDataAsync] Data refreshed! Total payments: {allPayments.Count}, Total rooms: {allRooms.Count}");
+
+                // Log first few payments for verification
+                if (allPayments.Count > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("[RefreshReportDataAsync] First 5 payments from API:");
+                    foreach (var p in allPayments.Take(5))
+                    {
+                        System.Diagnostics.Debug.WriteLine($"  ID: {p.Id}, Status: {p.StatusPembayaran}, Amount: {p.JumlahBayar}, Date: {p.TanggalBayar}");
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("[RefreshReportDataAsync] WARNING: No payments received from API!");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[RefreshReportDataAsync] Error: {ex.Message}");
+            }
+        }
+
         private void UpdateReportStatCards()
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCards] Starting calculation with {allPayments.Count} total payments");
-                System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCards] Date range filter: {selectedStartDate:yyyy-MM-dd} to {selectedEndDate:yyyy-MM-dd}");
+                System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCards] ========== START UPDATE STAT CARDS ==========");
 
-                // Filter payments by date range
-                var filteredPayments = allPayments
-                    .Where(p => p.TanggalBayar.HasValue && p.TanggalBayar.Value.Date >= selectedStartDate.Date && p.TanggalBayar.Value.Date <= selectedEndDate.Date)
-                    .ToList();
-
-                System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCards] After date filter: {filteredPayments.Count} payments");
-
-                // Log status breakdown
-                var confirmedPayments = filteredPayments.Where(p => p.StatusPembayaran == "Confirmed" || p.StatusPembayaran == "confirmed").ToList();
-                var pendingPayments = filteredPayments.Where(p => p.StatusPembayaran == "Pending" || p.StatusPembayaran == "pending").ToList();
-                var otherPayments = filteredPayments.Where(p => p.StatusPembayaran != "Confirmed" && p.StatusPembayaran != "confirmed" && p.StatusPembayaran != "Pending" && p.StatusPembayaran != "pending").ToList();
-
-                System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCards] Status breakdown - Confirmed: {confirmedPayments.Count}, Pending: {pendingPayments.Count}, Other: {otherPayments.Count}");
-                if (otherPayments.Count > 0)
+                // Check if stats loaded
+                if (currentStats == null)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCards] Other statuses found: {string.Join(", ", otherPayments.Select(p => p.StatusPembayaran).Distinct())}");
+                    System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCards] ⚠️ WARNING: Dashboard stats not loaded yet!");
+                    // Fallback to manual calculation if needed
+                    UpdateReportStatCardsFromManualData();
+                    return;
                 }
 
-                // Calculate metrics
-                decimal totalRevenue = confirmedPayments.Sum(p => p.JumlahBayar);
+                System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCards] Using pre-calculated stats from API");
+                System.Diagnostics.Debug.WriteLine($"  - Total Revenue: {currentStats.TotalRevenue}");
+                System.Diagnostics.Debug.WriteLine($"  - Pending Revenue: {currentStats.PendingRevenue}");
+                System.Diagnostics.Debug.WriteLine($"  - Active Tenants: {currentStats.ActiveTenants}");
+                System.Diagnostics.Debug.WriteLine($"  - Occupancy: {currentStats.OccupiedRooms}/{currentStats.OccupiedRooms + currentStats.AvailableRooms}");
 
-                System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCards] Total Revenue Calculation: {confirmedPayments.Count} confirmed payments, Sum = {totalRevenue}");
-                if (confirmedPayments.Count > 0)
-                {
-                    System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCards] Confirmed payment amounts: {string.Join(", ", confirmedPayments.Select(p => p.JumlahBayar))}");
-                }
-
-                int pendingPaymentsCount = filteredPayments
-                    .Where(p => p.StatusPembayaran == "Pending" || p.StatusPembayaran == "pending")
-                    .Count();
-
-                decimal avgRate = allRooms.Count > 0 ? allRooms.Average(r => r.PRICE) : 0;
-
-                var occupiedRooms = allRooms.Where(r => r.STATUS == "Penuh" || r.STATUS == "Full").Count();
-                var totalRooms = allRooms.Count;
-                double occupancyRate = totalRooms > 0 ? (occupiedRooms / (double)totalRooms) * 100 : 0;
-
-                System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCards] Occupancy: {occupiedRooms}/{totalRooms} rooms = {occupancyRate:F1}%");
-
-                // Update stat cards with calculated values
                 if (InvokeRequired)
                 {
                     Invoke(new Action(() =>
                     {
-                        // Total Revenue - guna2HtmlLabel12
-                        guna2HtmlLabel12.Text = FormatCurrency(totalRevenue);
+                        // Total Revenue - direct from stats (no calculation needed)
+                        TotalRevenueHtmlLabel12.Text = FormatCurrency(currentStats.TotalRevenue);
 
-                        // Pending Payments - guna2HtmlLabel13
-                        guna2HtmlLabel13.Text = pendingPaymentsCount.ToString();
+                        // Pending Payments - count
+                        guna2HtmlLabel13.Text = currentStats.PendingPayments.ToString();
 
-                        // Average Rate - guna2HtmlLabel16
+                        // Average Rate - calculate from type breakdown if available
+                        decimal avgRate = 0;
+                        if (currentStats.TypeBreakdown != null && currentStats.TypeBreakdown.Count > 0)
+                        {
+                            // Average = Total Revenue / Total Rooms
+                            int totalRooms = currentStats.TypeBreakdown.Sum(t => t.Count);
+                            if (totalRooms > 0)
+                            {
+                                avgRate = currentStats.TypeBreakdown.Sum(t => t.Revenue) / totalRooms;
+                            }
+                        }
                         guna2HtmlLabel16.Text = FormatCurrency(avgRate);
 
-                        // Occupancy Rate - guna2HtmlLabel15
+                        // Occupancy Rate
+                        int totalRoomCount = currentStats.OccupiedRooms + currentStats.AvailableRooms;
+                        double occupancyRate = totalRoomCount > 0 
+                            ? (currentStats.OccupiedRooms / (double)totalRoomCount) * 100 
+                            : 0;
                         guna2HtmlLabel15.Text = $"{occupancyRate:F1} %";
 
-                        // Percentage change from last month
-                        var lastMonthPayments = allPayments
-                            .Where(p => p.TanggalBayar.HasValue && p.TanggalBayar.Value.Date >= DateTime.Now.AddMonths(-1).Date && p.TanggalBayar.Value.Date < DateTime.Now.Date)
-                            .Where(p => p.StatusPembayaran == "Confirmed" || p.StatusPembayaran == "confirmed")
-                            .Sum(p => p.JumlahBayar);
+                        // Percentage change from last month - using allPayments data if available
+                        if (allPayments.Count > 0)
+                        {
+                            var lastMonthPayments = allPayments
+                                .Where(p => p.TanggalBayar.HasValue && 
+                                    p.TanggalBayar.Value.Date >= DateTime.Now.AddMonths(-1).Date && 
+                                    p.TanggalBayar.Value.Date < DateTime.Now.Date)
+                                .Where(p => p.StatusPembayaran == "Confirmed" || p.StatusPembayaran == "confirmed")
+                                .Sum(p => p.JumlahBayar);
 
-                        double percentageChange = lastMonthPayments > 0 
-                            ? ((double)totalRevenue - (double)lastMonthPayments) / (double)lastMonthPayments * 100
-                            : 0;
+                            double percentageChange = lastMonthPayments > 0 
+                                ? ((double)currentStats.TotalRevenue - (double)lastMonthPayments) / (double)lastMonthPayments * 100
+                                : 0;
 
-                        guna2HtmlLabel2.Text = percentageChange >= 0
-                            ? $"+ {percentageChange:F1} % from last mth"
-                            : $"- {Math.Abs(percentageChange):F1} % from last mth";
+                            guna2HtmlLabel2.Text = percentageChange >= 0
+                                ? $"+ {percentageChange:F1} % from last mth"
+                                : $"- {Math.Abs(percentageChange):F1} % from last mth";
+                        }
 
-                        // Update Payment Status
-                        UpdatePaymentStatus(filteredPayments);
+                        // Update Payment Status using stats
+                        UpdatePaymentStatusFromStats();
+                    }));
+                }
+                else
+                {
+                    // Total Revenue
+                    TotalRevenueHtmlLabel12.Text = FormatCurrency(currentStats.TotalRevenue);
+                    guna2HtmlLabel13.Text = currentStats.PendingPayments.ToString();
+
+                    decimal avgRate = 0;
+                    if (currentStats.TypeBreakdown != null && currentStats.TypeBreakdown.Count > 0)
+                    {
+                        int totalRooms = currentStats.TypeBreakdown.Sum(t => t.Count);
+                        if (totalRooms > 0)
+                        {
+                            avgRate = currentStats.TypeBreakdown.Sum(t => t.Revenue) / totalRooms;
+                        }
+                    }
+                    guna2HtmlLabel16.Text = FormatCurrency(avgRate);
+
+                    int totalRoomCount = currentStats.OccupiedRooms + currentStats.AvailableRooms;
+                    double occupancyRate = totalRoomCount > 0 
+                        ? (currentStats.OccupiedRooms / (double)totalRoomCount) * 100 
+                        : 0;
+                    guna2HtmlLabel15.Text = $"{occupancyRate:F1} %";
+                }
+
+                System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCards] ========== END UPDATE STAT CARDS ==========");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCards] Error updating stat cards: {ex.Message}\n{ex.StackTrace}");
+            }
+        }
+
+        /// <summary>
+        /// Fallback method to update stats from manual calculation if DashboardStats not available
+        /// </summary>
+        private void UpdateReportStatCardsFromManualData()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCardsFromManualData] Falling back to manual calculation...");
+                System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCardsFromManualData] Total payments: {allPayments.Count}, Total rooms: {allRooms.Count}");
+
+                if (allPayments.Count == 0)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCardsFromManualData] ⚠️ No payments loaded, cannot calculate");
+                    return;
+                }
+
+                // Filter payments by date range
+                var filteredPayments = allPayments
+                    .Where(p => p.TanggalBayar.HasValue && 
+                        p.TanggalBayar.Value.Date >= selectedStartDate.Date && 
+                        p.TanggalBayar.Value.Date <= selectedEndDate.Date)
+                    .ToList();
+
+                var confirmedPayments = filteredPayments
+                    .Where(p => p.StatusPembayaran == "Confirmed" || p.StatusPembayaran == "confirmed")
+                    .ToList();
+
+                var pendingPayments = filteredPayments
+                    .Where(p => p.StatusPembayaran == "Pending" || p.StatusPembayaran == "pending")
+                    .ToList();
+
+                decimal totalRevenue = confirmedPayments.Sum(p => p.JumlahBayar);
+                decimal totalPendingRevenue = pendingPayments.Sum(p => p.JumlahBayar);
+
+                System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCardsFromManualData] Calculated - Confirmed: {FormatCurrency(totalRevenue)}, Pending: {FormatCurrency(totalPendingRevenue)}");
+
+                if (InvokeRequired)
+                {
+                    Invoke(new Action(() =>
+                    {
+                        TotalRevenueHtmlLabel12.Text = FormatCurrency(totalRevenue);
+                        guna2HtmlLabel13.Text = pendingPayments.Count.ToString();
+
+                        decimal avgRate = allRooms.Count > 0 ? allRooms.Average(r => r.PRICE) : 0;
+                        guna2HtmlLabel16.Text = FormatCurrency(avgRate);
+
+                        var occupiedRooms = allRooms.Where(r => r.STATUS == "Penuh" || r.STATUS == "Full").Count();
+                        var totalRooms = allRooms.Count;
+                        double occupancyRate = totalRooms > 0 ? (occupiedRooms / (double)totalRooms) * 100 : 0;
+                        guna2HtmlLabel15.Text = $"{occupancyRate:F1} %";
                     }));
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCards] Error updating stat cards: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[UpdateReportStatCardsFromManualData] Error: {ex.Message}");
             }
         }
 
-        private void UpdatePaymentStatus(List<Pembayaran> filteredPayments)
+        /// <summary>
+        /// Update payment status display using DashboardStats
+        /// </summary>
+        private void UpdatePaymentStatusFromStats()
         {
             try
             {
-                // Count transactions and revenue by status
-                int confirmedCount = filteredPayments.Where(p => p.StatusPembayaran == "Confirmed" || p.StatusPembayaran == "confirmed").Count();
-                decimal confirmedRevenue = filteredPayments.Where(p => p.StatusPembayaran == "Confirmed" || p.StatusPembayaran == "confirmed").Sum(p => p.JumlahBayar);
-
-                int pendingCount = filteredPayments.Where(p => p.StatusPembayaran == "Pending" || p.StatusPembayaran == "pending").Count();
-                decimal pendingRevenue = filteredPayments.Where(p => p.StatusPembayaran == "Pending" || p.StatusPembayaran == "pending").Sum(p => p.JumlahBayar);
-
-                // Calculate total potential (all rooms fully occupied)
-                decimal totalPotentialRevenue = allRooms.Sum(r => r.PRICE);
+                if (currentStats == null) return;
 
                 // Update Confirmed status labels
-                guna2HtmlLabel27.Text = "Dikonfirmasi"; // Status label
-                guna2HtmlLabel25.Text = $"{confirmedCount} TRANSAKSI"; // Transaction count
-                guna2HtmlLabel24.Text = FormatCurrency(confirmedRevenue); // Amount
+                guna2HtmlLabel27.Text = "Dikonfirmasi";
+                decimal confirmedRevenue = currentStats.TotalRevenue;
+                guna2HtmlLabel25.Text = $"{currentStats.PendingPayments} TRANSAKSI";
+                guna2HtmlLabel24.Text = FormatCurrency(confirmedRevenue);
 
                 // Update Pending status labels
-                guna2HtmlLabel30.Text = "Menunggu"; // Status label
-                guna2HtmlLabel29.Text = $"{pendingCount} TRANSAKSI"; // Transaction count
-                guna2HtmlLabel28.Text = FormatCurrency(pendingRevenue); // Amount
+                guna2HtmlLabel30.Text = "Menunggu";
+                guna2HtmlLabel29.Text = $"{currentStats.PendingPayments} TRANSAKSI";
+                guna2HtmlLabel28.Text = FormatCurrency(currentStats.PendingRevenue);
 
                 // Update Total Potential labels
-                guna2HtmlLabel33.Text = "Potensi Total"; // Status label
-                guna2HtmlLabel32.Text = "Jika terisi penuh"; // Description
-                guna2HtmlLabel31.Text = FormatCurrency(totalPotentialRevenue); // Amount
+                guna2HtmlLabel33.Text = "Potensi Total";
+                guna2HtmlLabel32.Text = "Jika terisi penuh";
+                guna2HtmlLabel31.Text = FormatCurrency(currentStats.PotentialRevenue);
             }
             catch (Exception ex)
             {
@@ -355,6 +740,65 @@ namespace Kost_SiguraGura
 
             try
             {
+                System.Diagnostics.Debug.WriteLine("[SetupRevenueByTypeChart] Setting up revenue by type chart...");
+
+                // Use stats data if available, otherwise use manual calculation
+                if (currentStats == null || currentStats.TypeBreakdown == null || currentStats.TypeBreakdown.Count == 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("[SetupRevenueByTypeChart] Stats not available, using manual data");
+                    SetupRevenueByTypeChartManual();
+                    return;
+                }
+
+                System.Diagnostics.Debug.WriteLine($"[SetupRevenueByTypeChart] Using stats data - {currentStats.TypeBreakdown.Count} types");
+
+                // Show chart1 
+                chart1.Visible = true;
+
+                chart1.Series.Clear();
+                chart1.ChartAreas.Clear();
+
+                var chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("Default");
+                chart1.ChartAreas.Add(chartArea);
+
+                var series = new System.Windows.Forms.DataVisualization.Charting.Series
+                {
+                    Name = "Revenue",
+                    ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column
+                };
+
+                // Add data from type breakdown
+                foreach (var item in currentStats.TypeBreakdown)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[SetupRevenueByTypeChart] Adding: {item.Type} = {FormatCurrency(item.Revenue)}");
+                    series.Points.AddXY(item.Type, item.Revenue);
+                }
+
+                chart1.Series.Add(series);
+
+                // Format Y-axis labels as currency
+                chartArea.AxisY.LabelStyle.Format = "#,##0";
+
+                // Setup Revenue Breakdown cards di guna2Panel9
+                DisplayRevenueBreakdownFromStats();
+
+                System.Diagnostics.Debug.WriteLine("[SetupRevenueByTypeChart] Chart setup complete");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[SetupRevenueByTypeChart] Error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Fallback method to setup chart from manual calculation
+        /// </summary>
+        private void SetupRevenueByTypeChartManual()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("[SetupRevenueByTypeChartManual] Using manual data calculation");
+
                 var filteredPayments = allPayments
                     .Where(p => p.TanggalBayar.HasValue && p.TanggalBayar.Value.Date >= selectedStartDate.Date && p.TanggalBayar.Value.Date <= selectedEndDate.Date)
                     .Where(p => p.StatusPembayaran == "Confirmed" || p.StatusPembayaran == "confirmed")
@@ -367,27 +811,7 @@ namespace Kost_SiguraGura
                     .OrderByDescending(x => x.Revenue)
                     .ToList();
 
-                // Ensure we have exactly 2 entries (Standard and Premium)
-                if (revenueByType.Count == 0)
-                {
-                    revenueByType.Add(new { Type = "Premium", Revenue = 0m });
-                    revenueByType.Add(new { Type = "Standard", Revenue = 0m });
-                }
-                else if (revenueByType.Count == 1)
-                {
-                    if (revenueByType[0].Type.Contains("Standard") || revenueByType[0].Type.Contains("standard"))
-                    {
-                        revenueByType.Add(new { Type = "Premium", Revenue = 0m });
-                    }
-                    else
-                    {
-                        revenueByType.Insert(0, new { Type = "Standard", Revenue = 0m });
-                    }
-                }
-
-                // Show chart1 again (was hidden before)
                 chart1.Visible = true;
-
                 chart1.Series.Clear();
                 chart1.ChartAreas.Clear();
 
@@ -397,58 +821,52 @@ namespace Kost_SiguraGura
                 var series = new System.Windows.Forms.DataVisualization.Charting.Series
                 {
                     Name = "Revenue",
-                    ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column,
-                    XValueMember = "Type",
-                    YValueMembers = "Revenue"
+                    ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column
                 };
 
                 series.Points.DataBind(revenueByType.Take(2).ToList(), "Type", "Revenue", "");
                 chart1.Series.Add(series);
 
-                // Format Y-axis labels as currency
                 chartArea.AxisY.LabelStyle.Format = "#,##0";
 
-                // Setup Revenue Breakdown cards di guna2Panel9 (bagian bawah kiri)
+                System.Diagnostics.Debug.WriteLine("[SetupRevenueByTypeChartManual] Manual chart setup complete");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[SetupRevenueByTypeChartManual] Error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Display revenue breakdown cards from DashboardStats
+        /// </summary>
+        private void DisplayRevenueBreakdownFromStats()
+        {
+            try
+            {
+                if (currentStats == null || currentStats.TypeBreakdown == null) return;
+
+                System.Diagnostics.Debug.WriteLine($"[DisplayRevenueBreakdownFromStats] Displaying {currentStats.TypeBreakdown.Count} breakdown cards");
+
                 var revenueBreakdownData = new List<dynamic>();
 
-                var premiumRooms = allRooms.Where(r => r.TYPE.Contains("Premium") || r.TYPE.Contains("premium")).ToList();
-                var standardRooms = allRooms.Where(r => r.TYPE.Contains("Standard") || r.TYPE.Contains("standard")).ToList();
+                foreach (var item in currentStats.TypeBreakdown)
+                {
+                    revenueBreakdownData.Add(new
+                    {
+                        Type = item.Type,
+                        Revenue = item.Revenue,
+                        Occupied = item.Occupied,
+                        Total = item.Count,
+                        OccupancyText = $"{item.Occupied}/{item.Count} occupied"
+                    });
+                }
 
-                decimal premiumRevenue = filteredPayments
-                    .Where(p => p.Pemesanan?.Kamar?.TYPE != null && (p.Pemesanan.Kamar.TYPE.Contains("Premium") || p.Pemesanan.Kamar.TYPE.Contains("premium")))
-                    .Sum(p => p.JumlahBayar);
-
-                decimal standardRevenue = filteredPayments
-                    .Where(p => p.Pemesanan?.Kamar?.TYPE != null && (p.Pemesanan.Kamar.TYPE.Contains("Standard") || p.Pemesanan.Kamar.TYPE.Contains("standard")))
-                    .Sum(p => p.JumlahBayar);
-
-                int premiumOccupied = premiumRooms.Where(r => r.STATUS == "Penuh" || r.STATUS == "Full").Count();
-                int standardOccupied = standardRooms.Where(r => r.STATUS == "Penuh" || r.STATUS == "Full").Count();
-
-                revenueBreakdownData.Add(new 
-                { 
-                    Type = "Premium Rooms", 
-                    Revenue = premiumRevenue,
-                    Occupied = premiumOccupied,
-                    Total = premiumRooms.Count,
-                    OccupancyText = $"{premiumOccupied}/{premiumRooms.Count} occupied"
-                });
-
-                revenueBreakdownData.Add(new 
-                { 
-                    Type = "Standard Rooms", 
-                    Revenue = standardRevenue,
-                    Occupied = standardOccupied,
-                    Total = standardRooms.Count,
-                    OccupancyText = $"{standardOccupied}/{standardRooms.Count} occupied"
-                });
-
-                // Display Revenue Breakdown di guna2Panel9
                 DisplayRevenueBreakdownInPanel9(revenueBreakdownData);
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error setting up revenue by type chart: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[DisplayRevenueBreakdownFromStats] Error: {ex.Message}");
             }
         }
 
@@ -609,6 +1027,55 @@ namespace Kost_SiguraGura
 
             try
             {
+                System.Diagnostics.Debug.WriteLine("[SetupRoomDemographicsChart] Setting up demographics chart...");
+
+                // Use stats data if available
+                if (currentStats == null || currentStats.Demographics == null || currentStats.Demographics.Count == 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("[SetupRoomDemographicsChart] Stats not available, using manual data");
+                    SetupRoomDemographicsChartManual();
+                    return;
+                }
+
+                System.Diagnostics.Debug.WriteLine($"[SetupRoomDemographicsChart] Using stats data - {currentStats.Demographics.Count} age groups");
+
+                chart2.Series.Clear();
+                chart2.ChartAreas.Clear();
+
+                var chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("Default");
+                chart2.ChartAreas.Add(chartArea);
+
+                var series = new System.Windows.Forms.DataVisualization.Charting.Series
+                {
+                    Name = "Age Distribution",
+                    ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie
+                };
+
+                foreach (var item in currentStats.Demographics)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[SetupRoomDemographicsChart] Adding: {item.Name} = {item.Value}");
+                    series.Points.AddXY(item.Name, item.Value);
+                }
+
+                chart2.Series.Add(series);
+
+                System.Diagnostics.Debug.WriteLine("[SetupRoomDemographicsChart] Chart setup complete");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[SetupRoomDemographicsChart] Error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Fallback method to setup demographics chart from manual data
+        /// </summary>
+        private void SetupRoomDemographicsChartManual()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("[SetupRoomDemographicsChartManual] Using manual data");
+
                 var roomStatusDistribution = allRooms
                     .GroupBy(r => r.STATUS)
                     .Select(g => new { Status = g.Key, Count = g.Count() })
@@ -632,10 +1099,12 @@ namespace Kost_SiguraGura
                 }
 
                 chart2.Series.Add(series);
+
+                System.Diagnostics.Debug.WriteLine("[SetupRoomDemographicsChartManual] Manual chart setup complete");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error setting up demographics chart: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[SetupRoomDemographicsChartManual] Error: {ex.Message}");
             }
         }
 
@@ -649,6 +1118,56 @@ namespace Kost_SiguraGura
 
             try
             {
+                System.Diagnostics.Debug.WriteLine("[SetupMonthlyTrendChart] Setting up monthly trend chart...");
+
+                // Use stats data if available
+                if (currentStats == null || currentStats.MonthlyTrend == null || currentStats.MonthlyTrend.Count == 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("[SetupMonthlyTrendChart] Stats not available, using manual data");
+                    SetupMonthlyTrendChartManual();
+                    return;
+                }
+
+                System.Diagnostics.Debug.WriteLine($"[SetupMonthlyTrendChart] Using stats data - {currentStats.MonthlyTrend.Count} months");
+
+                chart4.Series.Clear();
+                chart4.ChartAreas.Clear();
+
+                var chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea("Default");
+                chart4.ChartAreas.Add(chartArea);
+
+                var series = new System.Windows.Forms.DataVisualization.Charting.Series
+                {
+                    Name = "Monthly Revenue",
+                    ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
+                };
+
+                foreach (var item in currentStats.MonthlyTrend)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[SetupMonthlyTrendChart] Adding: {item.Month} = {FormatCurrency(item.Revenue)}");
+                    series.Points.AddXY(item.Month, item.Revenue);
+                }
+
+                chart4.Series.Add(series);
+                chartArea.AxisY.LabelStyle.Format = "#,##0";
+
+                System.Diagnostics.Debug.WriteLine("[SetupMonthlyTrendChart] Chart setup complete");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[SetupMonthlyTrendChart] Error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Fallback method to setup monthly trend chart from manual data
+        /// </summary>
+        private void SetupMonthlyTrendChartManual()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("[SetupMonthlyTrendChartManual] Using manual data");
+
                 var monthlyData = GetMonthlyRevenueData();
 
                 chart4.Series.Clear();
@@ -669,10 +1188,12 @@ namespace Kost_SiguraGura
                 chart4.Series.Add(series);
 
                 chartArea.AxisY.LabelStyle.Format = "#,##0";
+
+                System.Diagnostics.Debug.WriteLine("[SetupMonthlyTrendChartManual] Manual chart setup complete");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error setting up monthly trend chart: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[SetupMonthlyTrendChartManual] Error: {ex.Message}");
             }
         }
 
@@ -818,8 +1339,46 @@ namespace Kost_SiguraGura
                 // Update button text with selected period
                 timeReportButton2.Text = selectedPeriodText;
 
-                UpdateReportStatCards();
-                SetupCharts();
+                // 🔄 REFRESH DATA FROM API BEFORE UPDATING UI
+                System.Diagnostics.Debug.WriteLine("[ShowDateRangeDialog] User changed filter - refreshing data from API...");
+
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        // Refresh payment dan room data dari API
+                        await RefreshReportDataAsync();
+
+                        // After refresh, update UI
+                        if (InvokeRequired)
+                        {
+                            Invoke(new Action(() =>
+                            {
+                                UpdateReportStatCards();
+                                SetupCharts();
+                                System.Diagnostics.Debug.WriteLine("[ShowDateRangeDialog] Data refreshed and UI updated");
+                            }));
+                        }
+                        else
+                        {
+                            UpdateReportStatCards();
+                            SetupCharts();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[ShowDateRangeDialog] Error during refresh: {ex.Message}");
+
+                        if (InvokeRequired)
+                        {
+                            Invoke(new Action(() =>
+                            {
+                                MessageBox.Show($"Error refreshing data: {ex.Message}", "Error", 
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }));
+                        }
+                    }
+                });
             }
 
             dialogForm.Dispose();
@@ -1009,6 +1568,319 @@ namespace Kost_SiguraGura
                 FontFactory.GetFont(FontFactory.HELVETICA, 8, BaseColor.GRAY));
             footer.Alignment = Element.ALIGN_CENTER;
             doc.Add(footer);
+        }
+
+        /// <summary>
+        /// Fetch dan tampilkan raw JSON response dari API untuk diagnostic
+        /// </summary>
+        private async void ShowRawApiResponseDiagnostic()
+        {
+            try
+            {
+                // Create a form to show the raw response
+                var diagnosticForm = new Form
+                {
+                    Text = "🔍 Raw API Response Diagnostic",
+                    Width = 1000,
+                    Height = 700,
+                    StartPosition = FormStartPosition.CenterParent,
+                    FormBorderStyle = FormBorderStyle.Sizable,
+                    ShowIcon = false
+                };
+
+                // Create tab control
+                var tabControl = new TabControl
+                {
+                    Dock = DockStyle.Fill,
+                    Margin = new Padding(10)
+                };
+
+                // TAB 1: RAW JSON
+                var tabRawJson = new TabPage { Text = "Raw JSON" };
+                var textBoxRawJson = new TextBox
+                {
+                    Multiline = true,
+                    ScrollBars = ScrollBars.Both,
+                    WordWrap = false,
+                    Font = new System.Drawing.Font("Courier New", 10),
+                    Dock = DockStyle.Fill
+                };
+                tabRawJson.Controls.Add(textBoxRawJson);
+
+                // TAB 2: PARSING INFO
+                var tabParsingInfo = new TabPage { Text = "Parsing Info" };
+                var textBoxParsingInfo = new TextBox
+                {
+                    Multiline = true,
+                    ScrollBars = ScrollBars.Both,
+                    Font = new System.Drawing.Font("Courier New", 9),
+                    Dock = DockStyle.Fill,
+                    ReadOnly = true
+                };
+                tabParsingInfo.Controls.Add(textBoxParsingInfo);
+
+                // TAB 3: CURRENT LOADED DATA
+                var tabCurrentData = new TabPage { Text = "Current Loaded Data" };
+                var textBoxCurrentData = new TextBox
+                {
+                    Multiline = true,
+                    ScrollBars = ScrollBars.Both,
+                    Font = new System.Drawing.Font("Courier New", 9),
+                    Dock = DockStyle.Fill,
+                    ReadOnly = true
+                };
+                tabCurrentData.Controls.Add(textBoxCurrentData);
+
+                tabControl.TabPages.Add(tabRawJson);
+                tabControl.TabPages.Add(tabParsingInfo);
+                tabControl.TabPages.Add(tabCurrentData);
+
+                diagnosticForm.Controls.Add(tabControl);
+
+                // Button panel
+                var buttonPanel = new Panel { Dock = DockStyle.Bottom, Height = 50, Padding = new Padding(10) };
+
+                var btnCopy = new Button
+                {
+                    Text = "Copy JSON",
+                    Width = 100,
+                    Height = 30,
+                    Location = new Point(10, 10)
+                };
+                btnCopy.Click += (s, e) =>
+                {
+                    try
+                    {
+                        Clipboard.SetText(textBoxRawJson.Text);
+                        MessageBox.Show("JSON copied to clipboard!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch { }
+                };
+
+                var btnClose = new Button
+                {
+                    Text = "Close",
+                    Width = 100,
+                    Height = 30,
+                    Location = new Point(120, 10),
+                    DialogResult = DialogResult.Cancel
+                };
+
+                buttonPanel.Controls.Add(btnCopy);
+                buttonPanel.Controls.Add(btnClose);
+                diagnosticForm.Controls.Add(buttonPanel);
+
+                diagnosticForm.Show();
+
+                // Fetch data asynchronously
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        // Fetch raw JSON
+                        System.Diagnostics.Debug.WriteLine("[ShowRawApiResponseDiagnostic] Fetching raw JSON from API...");
+                        var response = await ApiClient.Client.GetAsync("https://rahmatzaw.elarisnoir.my.id/api/payments");
+                        var rawJson = await response.Content.ReadAsStringAsync();
+
+                        // Format JSON for display
+                        var prettyJson = rawJson;
+                        try
+                        {
+                            var jsonObj = Newtonsoft.Json.Linq.JToken.Parse(rawJson);
+                            prettyJson = jsonObj.ToString();
+                        }
+                        catch { }
+
+                        // Populate Raw JSON tab
+                        diagnosticForm.Invoke((MethodInvoker)delegate
+                        {
+                            textBoxRawJson.Text = prettyJson;
+                        });
+
+                        // Attempt parsing and show details
+                        string parsingInfo = "========== PARSING DIAGNOSTIC ==========\n\n";
+                        parsingInfo += $"Response Length: {rawJson.Length} characters\n";
+                        parsingInfo += $"Response Status: {response.StatusCode}\n\n";
+
+                        // Try direct array
+                        parsingInfo += "--- Attempt 1: Direct Array ---\n";
+                        try
+                        {
+                            var directArray = JsonConvert.DeserializeObject<List<Pembayaran>>(rawJson);
+                            if (directArray != null)
+                            {
+                                parsingInfo += $"✓ SUCCESS: Parsed {directArray.Count} items\n";
+                                if (directArray.Count > 0)
+                                {
+                                    parsingInfo += $"  First item: ID={directArray[0].Id}, Amount={directArray[0].JumlahBayar}, Status={directArray[0].StatusPembayaran}\n";
+                                }
+                            }
+                            else
+                            {
+                                parsingInfo += "✗ Result is null\n";
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            parsingInfo += $"✗ FAILED: {ex.Message}\n";
+                        }
+
+                        parsingInfo += "\n--- Attempt 2: Wrapper Object ---\n";
+                        try
+                        {
+                            var jToken = Newtonsoft.Json.Linq.JToken.Parse(rawJson);
+                            parsingInfo += $"Root token type: {jToken.Type}\n";
+
+                            if (jToken.Type == Newtonsoft.Json.Linq.JTokenType.Object)
+                            {
+                                var obj = (Newtonsoft.Json.Linq.JObject)jToken;
+                                parsingInfo += $"Object keys: {string.Join(", ", obj.Properties().Select(p => p.Name))}\n";
+
+                                // Try to find array in known keys
+                                foreach (var key in new[] { "data", "pembayarans", "payments", "payment", "list", "items", "result" })
+                                {
+                                    if (obj[key] != null)
+                                    {
+                                        parsingInfo += $"\n Found key '{key}' (type: {obj[key].Type})\n";
+                                        if (obj[key].Type == Newtonsoft.Json.Linq.JTokenType.Array)
+                                        {
+                                            try
+                                            {
+                                                var items = obj[key].ToObject<List<Pembayaran>>();
+                                                parsingInfo += $" ✓ Parsed {items.Count} items from key '{key}'\n";
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                parsingInfo += $" ✗ Failed to parse: {ex.Message}\n";
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else if (jToken.Type == Newtonsoft.Json.Linq.JTokenType.Array)
+                            {
+                                parsingInfo += "Root is array - direct array parsing should have worked\n";
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            parsingInfo += $"✗ FAILED: {ex.Message}\n";
+                        }
+
+                        // Populate Parsing Info tab
+                        diagnosticForm.Invoke((MethodInvoker)delegate
+                        {
+                            textBoxParsingInfo.Text = parsingInfo;
+                        });
+
+                        // Populate Current Data tab
+                        string currentData = "========== CURRENT IN-MEMORY DATA ==========\n\n";
+                        currentData += $"Total Payments Loaded: {allPayments.Count}\n";
+                        currentData += $"Total Rooms Loaded: {allRooms.Count}\n\n";
+
+                        currentData += "--- Status Breakdown ---\n";
+                        currentData += $"Confirmed: {allPayments.Count(p => p.StatusPembayaran == "Confirmed" || p.StatusPembayaran == "confirmed")}\n";
+                        currentData += $"Pending: {allPayments.Count(p => p.StatusPembayaran == "Pending" || p.StatusPembayaran == "pending")}\n";
+                        currentData += $"Rejected: {allPayments.Count(p => p.StatusPembayaran == "Rejected" || p.StatusPembayaran == "rejected")}\n\n";
+
+                        currentData += "--- Revenue Breakdown ---\n";
+                        var confirmedTotal = allPayments.Where(p => p.StatusPembayaran == "Confirmed" || p.StatusPembayaran == "confirmed").Sum(p => p.JumlahBayar);
+                        var pendingTotal = allPayments.Where(p => p.StatusPembayaran == "Pending" || p.StatusPembayaran == "pending").Sum(p => p.JumlahBayar);
+                        var totalAll = allPayments.Sum(p => p.JumlahBayar);
+
+                        currentData += $"Confirmed Total: {FormatCurrency(confirmedTotal)}\n";
+                        currentData += $"Pending Total: {FormatCurrency(pendingTotal)}\n";
+                        currentData += $"ALL Total: {FormatCurrency(totalAll)}\n\n";
+
+                        currentData += "--- Expected from Database ---\n";
+                        currentData += $"Confirmed Total: Rp 16.000.000 (22 items)\n";
+                        currentData += $"Pending Total: Rp 5.000.000 (6 items)\n";
+                        currentData += $"ALL Total: Rp 21.000.000 (31 items)\n\n";
+
+                        if (confirmedTotal == 100000)
+                        {
+                            currentData += "⚠️ WARNING: Only Rp 100.000 loaded! Only 1 payment (ID=30 or 28) parsed!\n";
+                            currentData += "Parsing issue detected!\n";
+                        }
+
+                        // First 10 items
+                        currentData += "\n--- First 10 Loaded Payments ---\n";
+                        foreach (var p in allPayments.Take(10))
+                        {
+                            currentData += $"ID: {p.Id} | Amount: {p.JumlahBayar} | Status: {p.StatusPembayaran} | Date: {p.TanggalBayar}\n";
+                        }
+
+                        diagnosticForm.Invoke((MethodInvoker)delegate
+                        {
+                            textBoxCurrentData.Text = currentData;
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[ShowRawApiResponseDiagnostic] Error: {ex.Message}");
+                        diagnosticForm.Invoke((MethodInvoker)delegate
+                        {
+                            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Show detailed API response and data parsing info
+        /// </summary>
+        private void ShowApiDataDebugInfo()
+        {
+            try
+            {
+                // Create comprehensive debug message
+                string debugInfo = $"📊 API DATA DEBUG INFO\n\n" +
+                    $"========== CURRENT IN-MEMORY DATA ==========\n" +
+                    $"Total Payments Loaded: {allPayments.Count}\n" +
+                    $"Total Rooms Loaded: {allRooms.Count}\n\n" +
+
+                    $"========== PAYMENT STATUS BREAKDOWN ==========\n" +
+                    $"Confirmed: {allPayments.Count(p => p.StatusPembayaran == "Confirmed" || p.StatusPembayaran == "confirmed")}\n" +
+                    $"Pending: {allPayments.Count(p => p.StatusPembayaran == "Pending" || p.StatusPembayaran == "pending")}\n" +
+                    $"Rejected: {allPayments.Count(p => p.StatusPembayaran == "Rejected" || p.StatusPembayaran == "rejected")}\n" +
+                    $"Other: {allPayments.Count(p => p.StatusPembayaran != "Confirmed" && p.StatusPembayaran != "confirmed" && p.StatusPembayaran != "Pending" && p.StatusPembayaran != "pending" && p.StatusPembayaran != "Rejected" && p.StatusPembayaran != "rejected")}\n\n" +
+
+                    $"========== REVENUE CALCULATION ==========\n" +
+                    $"Confirmed Total: {FormatCurrency(allPayments.Where(p => p.StatusPembayaran == "Confirmed" || p.StatusPembayaran == "confirmed").Sum(p => p.JumlahBayar))}\n" +
+                    $"Pending Total: {FormatCurrency(allPayments.Where(p => p.StatusPembayaran == "Pending" || p.StatusPembayaran == "pending").Sum(p => p.JumlahBayar))}\n" +
+                    $"ALL Total: {FormatCurrency(allPayments.Sum(p => p.JumlahBayar))}\n\n" +
+
+                    $"========== FIRST 10 PAYMENTS ==========\n";
+
+                foreach (var payment in allPayments.Take(10))
+                {
+                    debugInfo += $"ID: {payment.Id} | Amount: {payment.JumlahBayar} | Status: {payment.StatusPembayaran} | Date: {payment.TanggalBayar}\n";
+                }
+
+                debugInfo += $"\n========== EXPECTED FROM DATABASE ==========\n" +
+                    $"Confirmed Total: Rp 16.000.000 (22 items)\n" +
+                    $"Pending Total: Rp 5.000.000 (6 items)\n" +
+                    $"ALL Total: Rp 21.000.000 (31 items)\n\n" +
+                    $"If showing different values, parsing issue detected!";
+
+                // Show in message box
+                MessageBox.Show(debugInfo, "🔍 API Data Debug Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error showing debug info: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TotalRevenueHtmlLabel12_Click(object sender, EventArgs e)
+        {
+            // Show raw API diagnostic
+            ShowRawApiResponseDiagnostic();
         }
     }
 }

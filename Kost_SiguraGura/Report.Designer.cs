@@ -51,15 +51,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.lblWelcome = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.guna2Panel4 = new Guna.UI2.WinForms.Guna2Panel();
@@ -68,7 +68,7 @@
             this.guna2HtmlLabel11 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
             this.guna2HtmlLabel2 = new Guna.UI2.WinForms.Guna2HtmlLabel();
-            this.guna2HtmlLabel12 = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            this.TotalRevenueHtmlLabel12 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.guna2HtmlLabel3 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.guna2Panel3 = new Guna.UI2.WinForms.Guna2Panel();
             this.guna2HtmlLabel17 = new Guna.UI2.WinForms.Guna2HtmlLabel();
@@ -149,7 +149,7 @@
             this.lblWelcome.Location = new System.Drawing.Point(31, 64);
             this.lblWelcome.Margin = new System.Windows.Forms.Padding(4);
             this.lblWelcome.Name = "lblWelcome";
-            this.lblWelcome.Size = new System.Drawing.Size(305, 23);
+            this.lblWelcome.Size = new System.Drawing.Size(397, 28);
             this.lblWelcome.TabIndex = 4;
             this.lblWelcome.Text = "Comprehensive financial analytics and reports";
             this.lblWelcome.UseWaitCursor = true;
@@ -203,7 +203,7 @@
             this.guna2HtmlLabel18.Location = new System.Drawing.Point(19, 106);
             this.guna2HtmlLabel18.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel18.Name = "guna2HtmlLabel18";
-            this.guna2HtmlLabel18.Size = new System.Drawing.Size(58, 19);
+            this.guna2HtmlLabel18.Size = new System.Drawing.Size(72, 24);
             this.guna2HtmlLabel18.TabIndex = 14;
             this.guna2HtmlLabel18.Text = "1/2 rooms";
             this.guna2HtmlLabel18.UseWaitCursor = true;
@@ -219,7 +219,7 @@
             this.guna2HtmlLabel15.Location = new System.Drawing.Point(19, 54);
             this.guna2HtmlLabel15.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel15.Name = "guna2HtmlLabel15";
-            this.guna2HtmlLabel15.Size = new System.Drawing.Size(44, 25);
+            this.guna2HtmlLabel15.Size = new System.Drawing.Size(53, 30);
             this.guna2HtmlLabel15.TabIndex = 12;
             this.guna2HtmlLabel15.Text = "50 %";
             this.guna2HtmlLabel15.UseWaitCursor = true;
@@ -235,7 +235,7 @@
             this.guna2HtmlLabel11.Location = new System.Drawing.Point(19, 18);
             this.guna2HtmlLabel11.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel11.Name = "guna2HtmlLabel11";
-            this.guna2HtmlLabel11.Size = new System.Drawing.Size(83, 19);
+            this.guna2HtmlLabel11.Size = new System.Drawing.Size(102, 24);
             this.guna2HtmlLabel11.TabIndex = 11;
             this.guna2HtmlLabel11.Text = "OCCUPANCY";
             this.guna2HtmlLabel11.UseWaitCursor = true;
@@ -246,7 +246,7 @@
             this.guna2Panel1.BorderRadius = 10;
             this.guna2Panel1.BorderThickness = 1;
             this.guna2Panel1.Controls.Add(this.guna2HtmlLabel2);
-            this.guna2Panel1.Controls.Add(this.guna2HtmlLabel12);
+            this.guna2Panel1.Controls.Add(this.TotalRevenueHtmlLabel12);
             this.guna2Panel1.Controls.Add(this.guna2HtmlLabel3);
             this.guna2Panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.guna2Panel1.FillColor = System.Drawing.Color.White;
@@ -268,26 +268,27 @@
             this.guna2HtmlLabel2.Location = new System.Drawing.Point(15, 106);
             this.guna2HtmlLabel2.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel2.Name = "guna2HtmlLabel2";
-            this.guna2HtmlLabel2.Size = new System.Drawing.Size(129, 19);
+            this.guna2HtmlLabel2.Size = new System.Drawing.Size(162, 24);
             this.guna2HtmlLabel2.TabIndex = 14;
             this.guna2HtmlLabel2.Text = "+ 12.5 % from last mth";
             this.guna2HtmlLabel2.UseWaitCursor = true;
             // 
-            // guna2HtmlLabel12
+            // TotalRevenueHtmlLabel12
             // 
-            this.guna2HtmlLabel12.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.TotalRevenueHtmlLabel12.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.guna2HtmlLabel12.BackColor = System.Drawing.Color.Transparent;
-            this.guna2HtmlLabel12.Font = new System.Drawing.Font("Inter", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.guna2HtmlLabel12.ForeColor = System.Drawing.Color.Black;
-            this.guna2HtmlLabel12.Location = new System.Drawing.Point(15, 54);
-            this.guna2HtmlLabel12.Margin = new System.Windows.Forms.Padding(4);
-            this.guna2HtmlLabel12.Name = "guna2HtmlLabel12";
-            this.guna2HtmlLabel12.Size = new System.Drawing.Size(95, 25);
-            this.guna2HtmlLabel12.TabIndex = 11;
-            this.guna2HtmlLabel12.Text = "Rp 100.000";
-            this.guna2HtmlLabel12.UseWaitCursor = true;
+            this.TotalRevenueHtmlLabel12.BackColor = System.Drawing.Color.Transparent;
+            this.TotalRevenueHtmlLabel12.Font = new System.Drawing.Font("Inter", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TotalRevenueHtmlLabel12.ForeColor = System.Drawing.Color.Black;
+            this.TotalRevenueHtmlLabel12.Location = new System.Drawing.Point(15, 54);
+            this.TotalRevenueHtmlLabel12.Margin = new System.Windows.Forms.Padding(4);
+            this.TotalRevenueHtmlLabel12.Name = "TotalRevenueHtmlLabel12";
+            this.TotalRevenueHtmlLabel12.Size = new System.Drawing.Size(115, 30);
+            this.TotalRevenueHtmlLabel12.TabIndex = 11;
+            this.TotalRevenueHtmlLabel12.Text = "Rp 0";
+            this.TotalRevenueHtmlLabel12.UseWaitCursor = true;
+            this.TotalRevenueHtmlLabel12.Click += new System.EventHandler(this.TotalRevenueHtmlLabel12_Click);
             // 
             // guna2HtmlLabel3
             // 
@@ -300,7 +301,7 @@
             this.guna2HtmlLabel3.Location = new System.Drawing.Point(15, 18);
             this.guna2HtmlLabel3.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel3.Name = "guna2HtmlLabel3";
-            this.guna2HtmlLabel3.Size = new System.Drawing.Size(103, 19);
+            this.guna2HtmlLabel3.Size = new System.Drawing.Size(128, 24);
             this.guna2HtmlLabel3.TabIndex = 10;
             this.guna2HtmlLabel3.Text = "TOTAL REVENUE";
             this.guna2HtmlLabel3.UseWaitCursor = true;
@@ -332,7 +333,7 @@
             this.guna2HtmlLabel17.Location = new System.Drawing.Point(24, 106);
             this.guna2HtmlLabel17.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel17.Name = "guna2HtmlLabel17";
-            this.guna2HtmlLabel17.Size = new System.Drawing.Size(62, 19);
+            this.guna2HtmlLabel17.Size = new System.Drawing.Size(77, 24);
             this.guna2HtmlLabel17.TabIndex = 14;
             this.guna2HtmlLabel17.Text = "Per month";
             this.guna2HtmlLabel17.UseWaitCursor = true;
@@ -348,7 +349,7 @@
             this.guna2HtmlLabel14.Location = new System.Drawing.Point(24, 54);
             this.guna2HtmlLabel14.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel14.Name = "guna2HtmlLabel14";
-            this.guna2HtmlLabel14.Size = new System.Drawing.Size(65, 25);
+            this.guna2HtmlLabel14.Size = new System.Drawing.Size(81, 30);
             this.guna2HtmlLabel14.TabIndex = 12;
             this.guna2HtmlLabel14.Text = "Rp 1,4 jt";
             this.guna2HtmlLabel14.UseWaitCursor = true;
@@ -364,7 +365,7 @@
             this.guna2HtmlLabel10.Location = new System.Drawing.Point(24, 18);
             this.guna2HtmlLabel10.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel10.Name = "guna2HtmlLabel10";
-            this.guna2HtmlLabel10.Size = new System.Drawing.Size(69, 19);
+            this.guna2HtmlLabel10.Size = new System.Drawing.Size(85, 24);
             this.guna2HtmlLabel10.TabIndex = 11;
             this.guna2HtmlLabel10.Text = "AVG. RATE";
             this.guna2HtmlLabel10.UseWaitCursor = true;
@@ -396,7 +397,7 @@
             this.guna2HtmlLabel16.Location = new System.Drawing.Point(23, 106);
             this.guna2HtmlLabel16.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel16.Name = "guna2HtmlLabel16";
-            this.guna2HtmlLabel16.Size = new System.Drawing.Size(76, 19);
+            this.guna2HtmlLabel16.Size = new System.Drawing.Size(95, 24);
             this.guna2HtmlLabel16.TabIndex = 13;
             this.guna2HtmlLabel16.Text = "Wait confirm";
             this.guna2HtmlLabel16.UseWaitCursor = true;
@@ -412,7 +413,7 @@
             this.guna2HtmlLabel13.Location = new System.Drawing.Point(23, 54);
             this.guna2HtmlLabel13.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel13.Name = "guna2HtmlLabel13";
-            this.guna2HtmlLabel13.Size = new System.Drawing.Size(39, 25);
+            this.guna2HtmlLabel13.Size = new System.Drawing.Size(47, 30);
             this.guna2HtmlLabel13.TabIndex = 12;
             this.guna2HtmlLabel13.Text = "Rp 0";
             this.guna2HtmlLabel13.UseWaitCursor = true;
@@ -428,7 +429,7 @@
             this.guna2HtmlLabel9.Location = new System.Drawing.Point(23, 18);
             this.guna2HtmlLabel9.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel9.Name = "guna2HtmlLabel9";
-            this.guna2HtmlLabel9.Size = new System.Drawing.Size(88, 19);
+            this.guna2HtmlLabel9.Size = new System.Drawing.Size(109, 24);
             this.guna2HtmlLabel9.TabIndex = 11;
             this.guna2HtmlLabel9.Text = "PENDING REV.";
             this.guna2HtmlLabel9.UseWaitCursor = true;
@@ -470,18 +471,18 @@
             // 
             this.chart2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea4.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea4);
-            legend4.Name = "Legend1";
-            this.chart2.Legends.Add(legend4);
+            chartArea1.Name = "ChartArea1";
+            this.chart2.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart2.Legends.Add(legend1);
             this.chart2.Location = new System.Drawing.Point(20, 85);
             this.chart2.Margin = new System.Windows.Forms.Padding(4);
             this.chart2.Name = "chart2";
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series4.Legend = "Legend1";
-            series4.Name = "Series1";
-            this.chart2.Series.Add(series4);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chart2.Series.Add(series1);
             this.chart2.Size = new System.Drawing.Size(516, 303);
             this.chart2.TabIndex = 2;
             this.chart2.Text = "chart2";
@@ -494,7 +495,7 @@
             this.guna2HtmlLabel7.Location = new System.Drawing.Point(20, 46);
             this.guna2HtmlLabel7.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel7.Name = "guna2HtmlLabel7";
-            this.guna2HtmlLabel7.Size = new System.Drawing.Size(107, 23);
+            this.guna2HtmlLabel7.Size = new System.Drawing.Size(137, 28);
             this.guna2HtmlLabel7.TabIndex = 1;
             this.guna2HtmlLabel7.Text = "Age distribution";
             // 
@@ -506,7 +507,7 @@
             this.guna2HtmlLabel8.Location = new System.Drawing.Point(17, 12);
             this.guna2HtmlLabel8.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel8.Name = "guna2HtmlLabel8";
-            this.guna2HtmlLabel8.Size = new System.Drawing.Size(196, 28);
+            this.guna2HtmlLabel8.Size = new System.Drawing.Size(250, 34);
             this.guna2HtmlLabel8.TabIndex = 0;
             this.guna2HtmlLabel8.Text = "Tenant Demographics";
             // 
@@ -530,17 +531,17 @@
             // 
             this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea5.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea5);
-            legend5.Name = "Legend1";
-            this.chart1.Legends.Add(legend5);
+            chartArea2.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chart1.Legends.Add(legend2);
             this.chart1.Location = new System.Drawing.Point(20, 85);
             this.chart1.Margin = new System.Windows.Forms.Padding(4);
             this.chart1.Name = "chart1";
-            series5.ChartArea = "ChartArea1";
-            series5.Legend = "Legend1";
-            series5.Name = "Series1";
-            this.chart1.Series.Add(series5);
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chart1.Series.Add(series2);
             this.chart1.Size = new System.Drawing.Size(619, 303);
             this.chart1.TabIndex = 2;
             this.chart1.Text = "chart1";
@@ -553,7 +554,7 @@
             this.guna2HtmlLabel6.Location = new System.Drawing.Point(17, 48);
             this.guna2HtmlLabel6.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel6.Name = "guna2HtmlLabel6";
-            this.guna2HtmlLabel6.Size = new System.Drawing.Size(191, 23);
+            this.guna2HtmlLabel6.Size = new System.Drawing.Size(247, 28);
             this.guna2HtmlLabel6.TabIndex = 1;
             this.guna2HtmlLabel6.Text = "Monthly revenue breakdown";
             // 
@@ -565,7 +566,7 @@
             this.guna2HtmlLabel5.Location = new System.Drawing.Point(17, 15);
             this.guna2HtmlLabel5.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel5.Name = "guna2HtmlLabel5";
-            this.guna2HtmlLabel5.Size = new System.Drawing.Size(210, 28);
+            this.guna2HtmlLabel5.Size = new System.Drawing.Size(266, 34);
             this.guna2HtmlLabel5.TabIndex = 0;
             this.guna2HtmlLabel5.Text = "Revenue by Room Type";
             // 
@@ -604,17 +605,17 @@
             // 
             this.chart4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea6.Name = "ChartArea1";
-            this.chart4.ChartAreas.Add(chartArea6);
-            legend6.Name = "Legend1";
-            this.chart4.Legends.Add(legend6);
+            chartArea3.Name = "ChartArea1";
+            this.chart4.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.chart4.Legends.Add(legend3);
             this.chart4.Location = new System.Drawing.Point(20, 85);
             this.chart4.Margin = new System.Windows.Forms.Padding(4);
             this.chart4.Name = "chart4";
-            series6.ChartArea = "ChartArea1";
-            series6.Legend = "Legend1";
-            series6.Name = "Series1";
-            this.chart4.Series.Add(series6);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.chart4.Series.Add(series3);
             this.chart4.Size = new System.Drawing.Size(1191, 303);
             this.chart4.TabIndex = 2;
             this.chart4.Text = "chart4";
@@ -627,7 +628,7 @@
             this.guna2HtmlLabel20.Location = new System.Drawing.Point(17, 48);
             this.guna2HtmlLabel20.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel20.Name = "guna2HtmlLabel20";
-            this.guna2HtmlLabel20.Size = new System.Drawing.Size(184, 23);
+            this.guna2HtmlLabel20.Size = new System.Drawing.Size(240, 28);
             this.guna2HtmlLabel20.TabIndex = 1;
             this.guna2HtmlLabel20.Text = "Last 6 months performance";
             // 
@@ -639,7 +640,7 @@
             this.guna2HtmlLabel21.Location = new System.Drawing.Point(17, 15);
             this.guna2HtmlLabel21.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel21.Name = "guna2HtmlLabel21";
-            this.guna2HtmlLabel21.Size = new System.Drawing.Size(214, 28);
+            this.guna2HtmlLabel21.Size = new System.Drawing.Size(269, 34);
             this.guna2HtmlLabel21.TabIndex = 0;
             this.guna2HtmlLabel21.Text = "Monthly Revenue Trend";
             // 
@@ -701,7 +702,7 @@
             this.guna2HtmlLabel31.Location = new System.Drawing.Point(329, 20);
             this.guna2HtmlLabel31.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel31.Name = "guna2HtmlLabel31";
-            this.guna2HtmlLabel31.Size = new System.Drawing.Size(58, 23);
+            this.guna2HtmlLabel31.Size = new System.Drawing.Size(71, 26);
             this.guna2HtmlLabel31.TabIndex = 15;
             this.guna2HtmlLabel31.Text = "Rp 2,7 jt";
             // 
@@ -716,7 +717,7 @@
             this.guna2HtmlLabel32.Location = new System.Drawing.Point(20, 38);
             this.guna2HtmlLabel32.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel32.Name = "guna2HtmlLabel32";
-            this.guna2HtmlLabel32.Size = new System.Drawing.Size(129, 19);
+            this.guna2HtmlLabel32.Size = new System.Drawing.Size(159, 24);
             this.guna2HtmlLabel32.TabIndex = 14;
             this.guna2HtmlLabel32.Text = "IF FULLY OCCOUPIED";
             this.guna2HtmlLabel32.UseWaitCursor = true;
@@ -729,7 +730,7 @@
             this.guna2HtmlLabel33.Location = new System.Drawing.Point(20, 7);
             this.guna2HtmlLabel33.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel33.Name = "guna2HtmlLabel33";
-            this.guna2HtmlLabel33.Size = new System.Drawing.Size(102, 23);
+            this.guna2HtmlLabel33.Size = new System.Drawing.Size(123, 26);
             this.guna2HtmlLabel33.TabIndex = 2;
             this.guna2HtmlLabel33.Text = "Total Potential";
             // 
@@ -757,7 +758,7 @@
             this.guna2HtmlLabel28.Location = new System.Drawing.Point(329, 20);
             this.guna2HtmlLabel28.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel28.Name = "guna2HtmlLabel28";
-            this.guna2HtmlLabel28.Size = new System.Drawing.Size(33, 23);
+            this.guna2HtmlLabel28.Size = new System.Drawing.Size(40, 26);
             this.guna2HtmlLabel28.TabIndex = 15;
             this.guna2HtmlLabel28.Text = "Rp 0";
             // 
@@ -772,7 +773,7 @@
             this.guna2HtmlLabel29.Location = new System.Drawing.Point(20, 38);
             this.guna2HtmlLabel29.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel29.Name = "guna2HtmlLabel29";
-            this.guna2HtmlLabel29.Size = new System.Drawing.Size(109, 19);
+            this.guna2HtmlLabel29.Size = new System.Drawing.Size(134, 24);
             this.guna2HtmlLabel29.TabIndex = 14;
             this.guna2HtmlLabel29.Text = "0 TRANSACTIONS";
             this.guna2HtmlLabel29.UseWaitCursor = true;
@@ -785,7 +786,7 @@
             this.guna2HtmlLabel30.Location = new System.Drawing.Point(20, 7);
             this.guna2HtmlLabel30.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel30.Name = "guna2HtmlLabel30";
-            this.guna2HtmlLabel30.Size = new System.Drawing.Size(60, 23);
+            this.guna2HtmlLabel30.Size = new System.Drawing.Size(73, 26);
             this.guna2HtmlLabel30.TabIndex = 2;
             this.guna2HtmlLabel30.Text = "Pending";
             // 
@@ -813,7 +814,7 @@
             this.guna2HtmlLabel24.Location = new System.Drawing.Point(329, 20);
             this.guna2HtmlLabel24.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel24.Name = "guna2HtmlLabel24";
-            this.guna2HtmlLabel24.Size = new System.Drawing.Size(83, 23);
+            this.guna2HtmlLabel24.Size = new System.Drawing.Size(101, 26);
             this.guna2HtmlLabel24.TabIndex = 15;
             this.guna2HtmlLabel24.Text = "Rp 600.000";
             // 
@@ -828,7 +829,7 @@
             this.guna2HtmlLabel25.Location = new System.Drawing.Point(20, 38);
             this.guna2HtmlLabel25.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel25.Name = "guna2HtmlLabel25";
-            this.guna2HtmlLabel25.Size = new System.Drawing.Size(106, 19);
+            this.guna2HtmlLabel25.Size = new System.Drawing.Size(131, 24);
             this.guna2HtmlLabel25.TabIndex = 14;
             this.guna2HtmlLabel25.Text = "1 TRANSACTIONS";
             this.guna2HtmlLabel25.UseWaitCursor = true;
@@ -841,7 +842,7 @@
             this.guna2HtmlLabel27.Location = new System.Drawing.Point(20, 7);
             this.guna2HtmlLabel27.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel27.Name = "guna2HtmlLabel27";
-            this.guna2HtmlLabel27.Size = new System.Drawing.Size(77, 23);
+            this.guna2HtmlLabel27.Size = new System.Drawing.Size(93, 26);
             this.guna2HtmlLabel27.TabIndex = 2;
             this.guna2HtmlLabel27.Text = "Confirmed";
             // 
@@ -853,7 +854,7 @@
             this.guna2HtmlLabel19.Location = new System.Drawing.Point(17, 12);
             this.guna2HtmlLabel19.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel19.Name = "guna2HtmlLabel19";
-            this.guna2HtmlLabel19.Size = new System.Drawing.Size(142, 28);
+            this.guna2HtmlLabel19.Size = new System.Drawing.Size(178, 34);
             this.guna2HtmlLabel19.TabIndex = 0;
             this.guna2HtmlLabel19.Text = "Payment Status";
             // 
@@ -897,7 +898,7 @@
             this.guna2HtmlLabel26.Location = new System.Drawing.Point(557, 17);
             this.guna2HtmlLabel26.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel26.Name = "guna2HtmlLabel26";
-            this.guna2HtmlLabel26.Size = new System.Drawing.Size(33, 23);
+            this.guna2HtmlLabel26.Size = new System.Drawing.Size(40, 26);
             this.guna2HtmlLabel26.TabIndex = 15;
             this.guna2HtmlLabel26.Text = "Rp 0";
             // 
@@ -912,7 +913,7 @@
             this.guna2HtmlLabel22.Location = new System.Drawing.Point(20, 49);
             this.guna2HtmlLabel22.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel22.Name = "guna2HtmlLabel22";
-            this.guna2HtmlLabel22.Size = new System.Drawing.Size(74, 19);
+            this.guna2HtmlLabel22.Size = new System.Drawing.Size(94, 24);
             this.guna2HtmlLabel22.TabIndex = 14;
             this.guna2HtmlLabel22.Text = "1/2 occupied";
             this.guna2HtmlLabel22.UseWaitCursor = true;
@@ -925,7 +926,7 @@
             this.guna2HtmlLabel4.Location = new System.Drawing.Point(20, 17);
             this.guna2HtmlLabel4.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel4.Name = "guna2HtmlLabel4";
-            this.guna2HtmlLabel4.Size = new System.Drawing.Size(97, 23);
+            this.guna2HtmlLabel4.Size = new System.Drawing.Size(117, 26);
             this.guna2HtmlLabel4.TabIndex = 2;
             this.guna2HtmlLabel4.Text = "Single Rooms";
             // 
@@ -937,7 +938,7 @@
             this.guna2HtmlLabel23.Location = new System.Drawing.Point(17, 15);
             this.guna2HtmlLabel23.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel23.Name = "guna2HtmlLabel23";
-            this.guna2HtmlLabel23.Size = new System.Drawing.Size(183, 28);
+            this.guna2HtmlLabel23.Size = new System.Drawing.Size(233, 34);
             this.guna2HtmlLabel23.TabIndex = 0;
             this.guna2HtmlLabel23.Text = "Revenue Breakdown";
             // 
@@ -990,7 +991,7 @@
             this.guna2HtmlLabel34.Location = new System.Drawing.Point(31, 25);
             this.guna2HtmlLabel34.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel34.Name = "guna2HtmlLabel34";
-            this.guna2HtmlLabel34.Size = new System.Drawing.Size(72, 34);
+            this.guna2HtmlLabel34.Size = new System.Drawing.Size(90, 40);
             this.guna2HtmlLabel34.TabIndex = 15;
             this.guna2HtmlLabel34.Text = "Report";
             this.guna2HtmlLabel34.UseWaitCursor = true;
@@ -1059,7 +1060,7 @@
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel15;
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel11;
         private Guna.UI2.WinForms.Guna2Panel guna2Panel1;
-        private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel12;
+        private Guna.UI2.WinForms.Guna2HtmlLabel TotalRevenueHtmlLabel12;
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel3;
         private Guna.UI2.WinForms.Guna2Panel guna2Panel3;
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel17;

@@ -34,6 +34,7 @@ namespace Kost_SiguraGura
             guna2ComboBox1.Items.Add("Semua Status");
             guna2ComboBox1.Items.Add("Tersedia / Available");
             guna2ComboBox1.Items.Add("Penuh / Full");
+            guna2ComboBox1.Items.Add("Terpesan / Booked");
             guna2ComboBox1.Items.Add("Perbaikan / Maintenance");
             guna2ComboBox1.SelectedIndex = 0;
 
@@ -70,6 +71,8 @@ namespace Kost_SiguraGura
                 return "tersedia_available";
             else if (status == "penuh" || status == "full")
                 return "penuh_full";
+            else if (status == "terpesan" || status == "booked")
+                return "terpesan_booked";
             else if (status == "perbaikan" || status == "maintenance")
                 return "perbaikan_maintenance";
 
@@ -335,16 +338,60 @@ namespace Kost_SiguraGura
             }
         }
 
+        // ===== FUNGSI HELPER: CEK STATUS TERPESAN =====
+        private bool IsBookedStatus(string status)
+        {
+            if (string.IsNullOrEmpty(status))
+                return false;
+
+            // Normalize status dengan menghapus whitespace dan konversi ke lowercase
+            status = System.Text.RegularExpressions.Regex.Replace(status.Trim(), @"\s+", " ").ToLower();
+
+            // Jika format bilingual (e.g., "Terpesan / Booked"), ambil bagian pertama
+            if (status.Contains("/"))
+            {
+                var parts = status.Split('/');
+                status = parts[0].Trim().ToLower();
+            }
+
+            // Cek apakah status adalah "Terpesan" atau "Booked"
+            return (status == "terpesan" || status == "booked");
+        }
+
         // ===== FUNGSI DELETE KAMAR =====
         private async void DeleteKamar(Kamar kamar)
         {
-            DialogResult result = MessageBox.Show(
+            // Validasi: Cek apakah kamar memiliki status "Terpesan"
+            if (IsBookedStatus(kamar.STATUS))
+            {
+                DialogResult result = MessageBox.Show(
+                    $"❌ Kamar '{kamar.ROOM}' saat ini memiliki status TERPESAN dan tidak bisa dihapus.\n\n" +
+                    $"Anda harus mengubah status kamar menjadi TERSEDIA terlebih dahulu melalui form edit.\n\n" +
+                    $"Apakah Anda ingin membuka form edit kamar sekarang?",
+                    "Kamar Terpesan - Tidak Bisa Dihapus",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (result == DialogResult.Yes)
+                {
+                    // Buka form Edit sehingga admin bisa mengubah status
+                    EditKamar editForm = new EditKamar(kamar);
+                    if (editForm.ShowDialog() == DialogResult.OK)
+                    {
+                        LoadDataKamar(); // Refresh data setelah edit
+                    }
+                }
+                return; // Jangan lanjutkan proses penghapusan
+            }
+
+            // Konfirmasi penghapusan jika status tidak "Terpesan"
+            DialogResult confirmResult = MessageBox.Show(
                 $"Apakah Anda yakin ingin menghapus kamar '{kamar.ROOM}'?",
                 "Konfirmasi Hapus",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
-            if (result != DialogResult.Yes)
+            if (confirmResult != DialogResult.Yes)
                 return;
 
             try

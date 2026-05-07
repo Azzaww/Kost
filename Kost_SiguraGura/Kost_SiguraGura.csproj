@@ -88,6 +88,7 @@
     <Compile Include="BerandaPage.Designer.cs">
       <DependentUpon>BerandaPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="DashboardStats.cs" />
     <Compile Include="DataKamar.cs">
       <SubType>UserControl</SubType>
     </Compile>

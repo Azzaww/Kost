@@ -53,6 +53,7 @@ namespace Kost_SiguraGura
             CbStatus.Items.Clear();
             CbStatus.Items.Add("Tersedia / Available");
             CbStatus.Items.Add("Penuh / Full");
+            CbStatus.Items.Add("Terpesan / Booked");
             CbStatus.Items.Add("Perbaikan / Maintenance");
             CbStatus.SelectedIndex = 0; // Default ke Tersedia
         }
@@ -81,6 +82,8 @@ namespace Kost_SiguraGura
                 return "tersedia_available";
             else if (status == "penuh" || status == "full")
                 return "penuh_full";
+            else if (status == "terpesan" || status == "booked")
+                return "terpesan_booked";
             else if (status == "perbaikan" || status == "maintenance")
                 return "perbaikan_maintenance";
 
@@ -98,6 +101,8 @@ namespace Kost_SiguraGura
                 return "Tersedia / Available";
             else if (normalized == "penuh_full")
                 return "Penuh / Full";
+            else if (normalized == "terpesan_booked")
+                return "Terpesan / Booked";
             else if (normalized == "perbaikan_maintenance")
                 return "Perbaikan / Maintenance";
 
