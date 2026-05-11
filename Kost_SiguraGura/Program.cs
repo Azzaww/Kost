@@ -32,7 +32,31 @@ namespace Kost_SiguraGura
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            // ✅ NEW: Initialize API connection dengan smart failover
+            // Cek koneksi ke Production, jika gagal fallback ke Localhost
+            InitializeApiConnection();
+
             Application.Run(new Form1());
+        }
+
+        /// <summary>
+        /// ✅ NEW: Initialize API connection on startup
+        /// Handles server connectivity check and automatic failover
+        /// </summary>
+        private static async void InitializeApiConnection()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("🔄 Initializing API connection...");
+                await ApiClient.InitializeConnection();
+                System.Diagnostics.Debug.WriteLine($"✅ API connection initialized. Active URL: {ApiClient.ActiveBaseUrl}");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"❌ Error during API initialization: {ex.Message}");
+                // Tetap lanjutkan aplikasi meskipun ada error, akan retry di login
+            }
         }
     }
 }

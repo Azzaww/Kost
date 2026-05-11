@@ -183,82 +183,85 @@ namespace Kost_SiguraGura
 
         private async void LoadDataKamar()
         {
-            using (HttpClient client = new HttpClient())
+            try
             {
-                try
+                // ✅ FIX: Use ApiClient.Client (dengan auto-refresh) dan ActiveBaseUrl (dengan failover)
+                string url = $"{ApiClient.ActiveBaseUrl}/kamar";
+                System.Diagnostics.Debug.WriteLine($"📍 Loading rooms from: {url}");
+
+                HttpResponseMessage response = await ApiClient.GetWithRetry(url);
+
+                if (!response.IsSuccessStatusCode)
                 {
-                    string url = "https://rahmatzaw.elarisnoir.my.id/api/kamar";
+                    MessageBox.Show($"Gagal mengambil data kamar. Status: {response.StatusCode}", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    System.Diagnostics.Debug.WriteLine($"❌ Failed to load rooms. Status: {response.StatusCode}");
+                    return;
+                }
 
-                    // ✅ FIX Issue #9: Add HTTP status code validation
-                    HttpResponseMessage response = await client.GetAsync(url);
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                var listData = JsonConvert.DeserializeObject<List<Kamar>>(jsonResponse);
 
-                    if (!response.IsSuccessStatusCode)
+                if (listData != null)
+                {
+                    fullListKamar.Clear(); // Bersihkan list cadangan
+
+                    // ✅ FIX Issue #8: Implement parallel image loading with concurrency limit
+                    // Load max 3 images in parallel to avoid overwhelming the server
+                    int maxParallelTasks = 3;
+                    var imageLoadTasks = new List<Task>();
+
+                    foreach (var k in listData)
                     {
-                        MessageBox.Show($"Gagal mengambil data kamar. Status: {response.StatusCode}", "Error",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
+                        fullListKamar.Add(k); // Add immediately untuk UI response
 
-                    string jsonResponse = await response.Content.ReadAsStringAsync();
-                    var listData = JsonConvert.DeserializeObject<List<Kamar>>(jsonResponse);
-
-                    if (listData != null)
-                    {
-                        fullListKamar.Clear(); // Bersihkan list cadangan
-
-                        // ✅ FIX Issue #8: Implement parallel image loading with concurrency limit
-                        // Load max 3 images in parallel to avoid overwhelming the server
-                        int maxParallelTasks = 3;
-                        var imageLoadTasks = new List<Task>();
-
-                        foreach (var k in listData)
+                        if (!string.IsNullOrEmpty(k.ThumbnailUrl))
                         {
-                            fullListKamar.Add(k); // Add immediately untuk UI response
+                            // Create task for image loading
+                            var loadImageTask = LoadImageAsync(k);
 
-                            if (!string.IsNullOrEmpty(k.ThumbnailUrl))
+                            imageLoadTasks.Add(loadImageTask);
+
+                            // If we have max parallel tasks, wait for one to complete
+                            if (imageLoadTasks.Count >= maxParallelTasks)
                             {
-                                // Create task for image loading
-                                var loadImageTask = LoadImageAsync(client, k);
-
-                                imageLoadTasks.Add(loadImageTask);
-
-                                // If we have max parallel tasks, wait for one to complete
-                                if (imageLoadTasks.Count >= maxParallelTasks)
-                                {
-                                    await Task.WhenAny(imageLoadTasks);
-                                    imageLoadTasks.RemoveAll(t => t.IsCompleted);
-                                }
+                                await Task.WhenAny(imageLoadTasks);
+                                imageLoadTasks.RemoveAll(t => t.IsCompleted);
                             }
                         }
-
-                        // Wait for remaining tasks
-                        if (imageLoadTasks.Count > 0)
-                        {
-                            await Task.WhenAll(imageLoadTasks);
-                        }
-
-                        // Tampilkan data menggunakan fungsi filter agar sinkron dengan status awal combobox
-                        ApplyFilters();
-
-                        if (dataGridView1.Columns["ThumbnailUrl"] != null)
-                            dataGridView1.Columns["ThumbnailUrl"].Visible = false;
                     }
+
+                    // Wait for remaining tasks
+                    if (imageLoadTasks.Count > 0)
+                    {
+                        await Task.WhenAll(imageLoadTasks);
+                    }
+
+                    // Tampilkan data menggunakan fungsi filter agar sinkron dengan status awal combobox
+                    ApplyFilters();
+
+                    if (dataGridView1.Columns["ThumbnailUrl"] != null)
+                        dataGridView1.Columns["ThumbnailUrl"].Visible = false;
+
+                    System.Diagnostics.Debug.WriteLine($"✅ Successfully loaded {listData.Count} rooms");
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Terjadi kesalahan: " + ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Terjadi kesalahan: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine($"❌ Error loading rooms: {ex.Message}\n{ex.StackTrace}");
             }
         }
 
         /// <summary>
         /// Load image asynchronously for a single room
+        /// ✅ FIX: Use ApiClient.Client (yang sudah memiliki timeout dan connection pooling)
         /// </summary>
-        private async Task LoadImageAsync(HttpClient client, Kamar kamar)
+        private async Task LoadImageAsync(Kamar kamar)
         {
             try
             {
-                byte[] imageBytes = await client.GetByteArrayAsync(kamar.ThumbnailUrl);
+                byte[] imageBytes = await ApiClient.Client.GetByteArrayAsync(kamar.ThumbnailUrl);
                 using (var ms = new System.IO.MemoryStream(imageBytes))
                 {
                     kamar.THUMBNAIL = new Bitmap(System.Drawing.Image.FromStream(ms));

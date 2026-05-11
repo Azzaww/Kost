@@ -159,6 +159,7 @@ namespace Kost_SiguraGura
         /// <summary>
         /// Construct full absolute URL from bukti_transfer field
         /// Handles both absolute URLs and relative paths
+        /// ✅ FIX: Use ActiveBaseUrl instead of hardcoded baseUrl
         /// </summary>
         private string ConstructFullImageUrl(string buktiTransfer)
         {
@@ -171,8 +172,9 @@ namespace Kost_SiguraGura
                 return buktiTransfer;
             }
 
-            // If relative path, construct full URL
-            string baseUrl = "https://rahmatzaw.elarisnoir.my.id";
+            // ✅ FIX: Use ActiveBaseUrl instead of hardcoded production URL
+            // Extract just the domain part (remove /api)
+            string activeUrl = ApiClient.ActiveBaseUrl.Replace("/api", "");
 
             // Ensure relative path starts with /
             if (!buktiTransfer.StartsWith("/"))
@@ -180,7 +182,7 @@ namespace Kost_SiguraGura
                 buktiTransfer = "/" + buktiTransfer;
             }
 
-            return baseUrl + buktiTransfer;
+            return activeUrl + buktiTransfer;
         }
     }
 }

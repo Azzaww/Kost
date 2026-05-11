@@ -43,14 +43,12 @@ namespace Kost_SiguraGura
         {
             try
             {
-                using (HttpClient client = new HttpClient())
+                try
                 {
-                    client.Timeout = TimeSpan.FromSeconds(30);
-                    string url = "https://rahmatzaw.elarisnoir.my.id/api/galleries";
-
+                    string url = $"{ApiClient.ActiveBaseUrl}/galleries";
                     System.Diagnostics.Debug.WriteLine($"🔄 Loading galleries from: {url}");
 
-                    HttpResponseMessage response = await client.GetAsync(url);
+                    HttpResponseMessage response = await ApiClient.GetWithRetry(url);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -85,6 +83,12 @@ namespace Kost_SiguraGura
                         MessageBox.Show($"❌ Failed to load galleries: {response.StatusCode}", "Error",
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"❌ Error loading galleries: {ex.Message}");
+                    MessageBox.Show($"❌ Error loading galleries: {ex.Message}", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (HttpRequestException httpEx)

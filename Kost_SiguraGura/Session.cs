@@ -19,6 +19,7 @@ namespace Kost_SiguraGura
         private static string _userRole;
         private static string _username;
         private static string _token;
+        private static string _refreshToken;
 
         public static long UserId
         {
@@ -92,6 +93,24 @@ namespace Kost_SiguraGura
             }
         }
 
+        public static string RefreshToken
+        {
+            get
+            {
+                lock (_lockObject)
+                {
+                    return _refreshToken;
+                }
+            }
+            set
+            {
+                lock (_lockObject)
+                {
+                    _refreshToken = value;
+                }
+            }
+        }
+
         /// <summary>
         /// Clear all session data safely
         /// </summary>
@@ -103,6 +122,7 @@ namespace Kost_SiguraGura
                 _userRole = null;
                 _username = null;
                 _token = null;
+                _refreshToken = null;
             }
         }
     }

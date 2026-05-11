@@ -168,9 +168,9 @@ namespace Kost_SiguraGura
                 // ✅ PENTING: Field name HARUS "image" sesuai backend API
                 formData.Add(fileContent, "image", Path.GetFileName(selectedImagePath));
 
-                // POST ke API
-                string url = "https://rahmatzaw.elarisnoir.my.id/api/galleries";
-                HttpResponseMessage response = await ApiClient.Client.PostAsync(url, formData);
+                // ✅ FIX: POST ke API menggunakan ActiveBaseUrl dan PostWithRetry
+                string url = $"{ApiClient.ActiveBaseUrl}/galleries";
+                HttpResponseMessage response = await ApiClient.PostWithRetry(url, formData);
 
                 if (response.IsSuccessStatusCode)
                 {

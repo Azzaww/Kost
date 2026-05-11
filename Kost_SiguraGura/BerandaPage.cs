@@ -73,8 +73,9 @@ namespace Kost_SiguraGura
         {
             try
             {
-                string url = "https://rahmatzaw.elarisnoir.my.id/api/payments";
-                HttpResponseMessage response = await ApiClient.Client.GetAsync(url);
+                // ✅ FIX: Use ActiveBaseUrl dan GetWithRetry
+                string url = $"{ApiClient.ActiveBaseUrl}/payments";
+                HttpResponseMessage response = await ApiClient.GetWithRetry(url);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -127,8 +128,9 @@ namespace Kost_SiguraGura
         {
             try
             {
-                string url = "https://rahmatzaw.elarisnoir.my.id/api/kamar";
-                HttpResponseMessage response = await ApiClient.Client.GetAsync(url);
+                // ✅ FIX: Use ActiveBaseUrl dan GetWithRetry
+                string url = $"{ApiClient.ActiveBaseUrl}/kamar";
+                HttpResponseMessage response = await ApiClient.GetWithRetry(url);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -183,28 +185,47 @@ namespace Kost_SiguraGura
         {
             try
             {
+                System.Diagnostics.Debug.WriteLine($"[UpdateKPICards] Starting KPI update...");
+                System.Diagnostics.Debug.WriteLine($"[UpdateKPICards] allPayments count: {allPayments.Count}");
+                System.Diagnostics.Debug.WriteLine($"[UpdateKPICards] allRooms count: {allRooms.Count}");
+
                 // ===== CARD 1: TOTAL INCOME =====
-                // Sum semua payments yang statusnya "Confirmed"
+                // Sum confirmed payments OR non-pending/non-cancelled payments
                 decimal totalRevenue = allPayments
                     .Where(p => p.StatusPembayaran != null && 
-                                p.StatusPembayaran.Equals("Confirmed", StringComparison.OrdinalIgnoreCase))
+                               (p.StatusPembayaran.Equals("Confirmed", StringComparison.OrdinalIgnoreCase) ||
+                                p.StatusPembayaran.Equals("Verified", StringComparison.OrdinalIgnoreCase)))
                     .Sum(p => p.JumlahBayar);
+
+                // If no confirmed payments, show pending as alternative (for demo)
+                if (totalRevenue == 0)
+                {
+                    totalRevenue = allPayments
+                        .Where(p => p.StatusPembayaran != null && 
+                                   !p.StatusPembayaran.Equals("Cancelled", StringComparison.OrdinalIgnoreCase) &&
+                                   !p.StatusPembayaran.Equals("Rejected", StringComparison.OrdinalIgnoreCase))
+                        .Sum(p => p.JumlahBayar);
+                }
+
                 lblIncome.Text = FormatKeRupiahSingkat((long)totalRevenue);
+                System.Diagnostics.Debug.WriteLine($"[UpdateKPICards] Total Revenue: Rp{totalRevenue:N0}");
 
                 // ===== CARD 2: ACTIVE TENANTS =====
                 // Count distinct tenants dari pemesanan yang active
                 int activeTenants = allPayments
                     .Where(p => p.Pemesanan != null && 
                                 p.Pemesanan.StatusPemesanan != null &&
-                                p.Pemesanan.StatusPemesanan.Equals("Active", StringComparison.OrdinalIgnoreCase))
+                               (p.Pemesanan.StatusPemesanan.Equals("Active", StringComparison.OrdinalIgnoreCase) ||
+                                p.Pemesanan.StatusPemesanan.Equals("Aktif", StringComparison.OrdinalIgnoreCase)))
                     .Select(p => p.Pemesanan.PenyewaId)
                     .Distinct()
                     .Count();
                 guna2HtmlLabel13.Text = activeTenants.ToString();
                 guna2HtmlLabel16.Text = $"Total {activeTenants} active tenant(s)";
+                System.Diagnostics.Debug.WriteLine($"[UpdateKPICards] Active Tenants: {activeTenants}");
 
                 // ===== CARD 3: AVAILABLE ROOMS =====
-                // Count rooms dengan status "Tersedia" atau "Available"
+                // Count rooms dengan status "Tersedia" atau "Available" (Indonesian or English)
                 int availableRooms = allRooms
                     .Where(r => r.STATUS != null && 
                                (r.STATUS.Equals("Tersedia", StringComparison.OrdinalIgnoreCase) ||
@@ -213,23 +234,38 @@ namespace Kost_SiguraGura
                 int totalRooms = allRooms.Count;
                 guna2HtmlLabel14.Text = availableRooms.ToString();
                 guna2HtmlLabel17.Text = $"From {totalRooms} room(s)";
+                System.Diagnostics.Debug.WriteLine($"[UpdateKPICards] Available Rooms: {availableRooms}/{totalRooms}");
+
+                // Debug: Log all room statuses
+                foreach (var room in allRooms)
+                {
+                    System.Diagnostics.Debug.WriteLine($"  - Room {room.ROOM}: Status='{room.STATUS}'");
+                }
 
                 // ===== CARD 4: PENDING PAYMENTS =====
-                // Count payments dengan status "Pending"
+                // Count payments dengan status "Pending" (Indonesian or English)
                 int pendingPayments = allPayments
                     .Where(p => p.StatusPembayaran != null &&
-                                p.StatusPembayaran.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+                               (p.StatusPembayaran.Equals("Pending", StringComparison.OrdinalIgnoreCase) ||
+                                p.StatusPembayaran.Equals("Ditunda", StringComparison.OrdinalIgnoreCase)))
                     .Count();
                 guna2HtmlLabel15.Text = pendingPayments.ToString();
 
                 string pendingStatus = pendingPayments == 0 ? "All bills paid" : $"{pendingPayments} payment(s) awaiting";
                 guna2HtmlLabel18.Text = pendingStatus;
+                System.Diagnostics.Debug.WriteLine($"[UpdateKPICards] Pending Payments: {pendingPayments}");
+
+                // Debug: Log all payment statuses
+                foreach (var payment in allPayments)
+                {
+                    System.Diagnostics.Debug.WriteLine($"  - Payment {payment.Id}: Status='{payment.StatusPembayaran}', Amount={payment.JumlahBayar}");
+                }
 
                 System.Diagnostics.Debug.WriteLine($"✅ KPI Updated - Revenue: Rp{totalRevenue:N0}, Tenants: {activeTenants}, Available: {availableRooms}, Pending: {pendingPayments}");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ Error updating KPI cards: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"❌ Error updating KPI cards: {ex.Message}\n{ex.StackTrace}");
             }
         }
 

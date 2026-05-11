@@ -406,12 +406,12 @@ namespace Kost_SiguraGura
                 }
                 System.Diagnostics.Debug.WriteLine($"DEBUG: Total images added: {imageCount}");
 
-                // POST ke API dengan multipart form data
-                string url = "https://rahmatzaw.elarisnoir.my.id/api/kamar";
+                // ✅ FIX: POST ke API dengan multipart form data menggunakan ActiveBaseUrl dan PostWithRetry
+                string url = $"{ApiClient.ActiveBaseUrl}/kamar";
                 System.Diagnostics.Debug.WriteLine($"DEBUG: Sending POST request to {url}");
                 System.Diagnostics.Debug.WriteLine($"DEBUG: FormData contains {formData.Count()} items");
 
-                HttpResponseMessage response = await ApiClient.Client.PostAsync(url, formData);
+                HttpResponseMessage response = await ApiClient.PostWithRetry(url, formData);
 
                 System.Diagnostics.Debug.WriteLine($"DEBUG: Response status: {response.StatusCode}");
 

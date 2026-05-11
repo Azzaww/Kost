@@ -650,7 +650,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel4.ColumnCount = 2;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 572F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel4.Controls.Add(this.guna2Panel5, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.guna2Panel9, 0, 0);
             this.tableLayoutPanel4.Location = new System.Drawing.Point(23, 1190);
@@ -677,6 +677,7 @@
             this.guna2Panel5.Name = "guna2Panel5";
             this.guna2Panel5.Size = new System.Drawing.Size(564, 329);
             this.guna2Panel5.TabIndex = 0;
+            this.guna2Panel5.AutoScroll = true;
             // 
             // guna2Panel13
             // 
@@ -691,7 +692,7 @@
             this.guna2Panel13.Location = new System.Drawing.Point(17, 198);
             this.guna2Panel13.Margin = new System.Windows.Forms.Padding(4);
             this.guna2Panel13.Name = "guna2Panel13";
-            this.guna2Panel13.Size = new System.Drawing.Size(523, 65);
+            this.guna2Panel13.Size = new System.Drawing.Size(540, 65);
             this.guna2Panel13.TabIndex = 4;
             // 
             // guna2HtmlLabel31
@@ -747,7 +748,7 @@
             this.guna2Panel12.Location = new System.Drawing.Point(17, 123);
             this.guna2Panel12.Margin = new System.Windows.Forms.Padding(4);
             this.guna2Panel12.Name = "guna2Panel12";
-            this.guna2Panel12.Size = new System.Drawing.Size(523, 65);
+            this.guna2Panel12.Size = new System.Drawing.Size(540, 65);
             this.guna2Panel12.TabIndex = 3;
             // 
             // guna2HtmlLabel28
@@ -803,7 +804,7 @@
             this.guna2Panel11.Location = new System.Drawing.Point(17, 48);
             this.guna2Panel11.Margin = new System.Windows.Forms.Padding(4);
             this.guna2Panel11.Name = "guna2Panel11";
-            this.guna2Panel11.Size = new System.Drawing.Size(523, 65);
+            this.guna2Panel11.Size = new System.Drawing.Size(540, 65);
             this.guna2Panel11.TabIndex = 2;
             // 
             // guna2HtmlLabel24

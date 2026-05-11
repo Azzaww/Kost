@@ -47,7 +47,9 @@ namespace Kost_SiguraGura
 
             try
             {
-                string url = "https://rahmatzaw.elarisnoir.my.id/api/auth/login";
+                // ✅ FIX: Use ActiveBaseUrl instead of hardcoded production URL
+                string url = $"{ApiClient.ActiveBaseUrl}/auth/login";
+                System.Diagnostics.Debug.WriteLine($"📍 Attempting login to: {url}");
                 HttpResponseMessage response = await ApiClient.Client.PostAsync(url, content);
 
                 string responseBody = await response.Content.ReadAsStringAsync();
@@ -89,6 +91,33 @@ namespace Kost_SiguraGura
                         Session.UserRole = userRole;
                         Session.Username = userData["username"]?.ToString() ?? txtUsername.Text;
 
+                        // ✅ NEW: Extract and save tokens from response
+                        // Backend returns: { "user": {...}, "accessToken": "...", "refreshToken": "...", "expiresIn": 900 }
+                        string accessToken = result["accessToken"]?.ToString() ?? result["access_token"]?.ToString();
+                        string refreshToken = result["refreshToken"]?.ToString() ?? result["refresh_token"]?.ToString();
+
+                        if (!string.IsNullOrEmpty(accessToken))
+                        {
+                            Session.Token = accessToken;
+                        }
+                        else
+                        {
+                            MessageBox.Show("❌ SECURITY ERROR: accessToken tidak ditemukan dalam response dari server.\n\nTidak dapat melanjutkan login untuk alasan keamanan.", 
+                                "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        if (!string.IsNullOrEmpty(refreshToken))
+                        {
+                            Session.RefreshToken = refreshToken;
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("⚠️ WARNING: refreshToken tidak ditemukan dalam response. Auto-refresh mungkin tidak akan bekerja.");
+                        }
+
+                        System.Diagnostics.Debug.WriteLine($"✅ Login sukses! Token disimpan. ExpiresIn: {result["expiresIn"]}");
+
                         Sidebar main = new Sidebar();
                         main.Show();
                         this.Hide();
@@ -101,12 +130,16 @@ namespace Kost_SiguraGura
                 }
                 else
                 {
-                    MessageBox.Show("Login Gagal! Username/Password salah atau Server Error.");
+                    System.Diagnostics.Debug.WriteLine($"❌ Login Failed - Status Code: {response.StatusCode}");
+                    System.Diagnostics.Debug.WriteLine($"📄 Response Body: {responseBody}");
+                    MessageBox.Show($"Login Gagal!\n\nStatus: {response.StatusCode}\n\nResponse:\n{responseBody}");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Terjadi Kesalahan: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine($"❌ Exception during login: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"📋 Stack Trace: {ex.StackTrace}");
+                MessageBox.Show("Terjadi Kesalahan:\n" + ex.Message + "\n\nLihat Debug Output untuk detail lebih lengkap.");
             }
         }
 

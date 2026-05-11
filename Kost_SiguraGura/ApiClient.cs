@@ -18,7 +18,20 @@ namespace Kost_SiguraGura
         // Gunakan satu Client ini untuk SEMUA Form dan UserControl
         public static readonly HttpClient Client = new HttpClient(handler);
 
-        private const string BaseUrl = "https://rahmatzaw.elarisnoir.my.id/api";
+        // ✅ NEW: Multi-URL support dengan failover
+        private const string ProductionUrl = "https://rahmatzaw.elarisnoir.my.id/api";
+        private const string LocalhostUrl = "http://localhost:8081/api";
+
+        // Active URL yang digunakan (dapat berubah sesuai hasil connectivity check)
+        private static string _activeBaseUrl = ProductionUrl;
+        public static string ActiveBaseUrl
+        {
+            get { return _activeBaseUrl; }
+            private set { _activeBaseUrl = value; }
+        }
+
+        // Lock untuk thread-safety saat update ActiveBaseUrl
+        private static readonly object _urlLock = new object();
 
         /// <summary>
         /// Static constructor to initialize HttpClient timeout
@@ -32,6 +45,208 @@ namespace Kost_SiguraGura
         }
 
         /// <summary>
+        /// ✅ NEW: Initialize connection dengan smart failover system
+        /// Cek koneksi ke Production server, jika gagal fallback ke Localhost
+        /// Harus dipanggil sekali saat aplikasi startup
+        /// </summary>
+        public static async Task InitializeConnection()
+        {
+            try
+            {
+                // Pertama coba Production URL
+                using (var cts = new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(5)))
+                using (var response = await Client.GetAsync(ProductionUrl + "/health", System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cts.Token))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        lock (_urlLock)
+                        {
+                            ActiveBaseUrl = ProductionUrl;
+                        }
+                        System.Diagnostics.Debug.WriteLine("✅ Connected to Production server");
+                        return;
+                    }
+                }
+            }
+            catch
+            {
+                // Production gagal, log dan lanjut ke fallback
+                System.Diagnostics.Debug.WriteLine("⚠️ Production server not accessible, trying localhost...");
+            }
+
+            // Fallback ke Localhost
+            try
+            {
+                using (var cts = new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(5)))
+                using (var response = await Client.GetAsync(LocalhostUrl + "/health", System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cts.Token))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        lock (_urlLock)
+                        {
+                            ActiveBaseUrl = LocalhostUrl;
+                        }
+                        System.Diagnostics.Debug.WriteLine("✅ Connected to Localhost server");
+                        return;
+                    }
+                }
+            }
+            catch
+            {
+                // Localhost juga gagal
+                System.Diagnostics.Debug.WriteLine("❌ Both servers unreachable, using Production as default");
+            }
+
+            // Default ke Production jika kedua gagal (akan error di actual request nanti)
+            lock (_urlLock)
+            {
+                ActiveBaseUrl = ProductionUrl;
+            }
+        }
+
+        /// <summary>
+        /// ✅ NEW: Add Bearer token to request header
+        /// </summary>
+        private static void AddBearerTokenHeader()
+        {
+            // Clear existing Authorization headers
+            Client.DefaultRequestHeaders.Remove("Authorization");
+
+            // Add new Bearer token jika ada
+            if (!string.IsNullOrEmpty(Session.Token))
+            {
+                Client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Session.Token}");
+            }
+        }
+
+        /// <summary>
+        /// ✅ NEW: Auto-refresh token when receiving 401 Unauthorized
+        /// Menggunakan RefreshToken untuk mendapatkan AccessToken baru
+        /// Returns true jika refresh berhasil, false jika gagal
+        /// </summary>
+        private static async Task<bool> RefreshTokenAsync()
+        {
+            try
+            {
+                // Jika tidak ada RefreshToken, tidak bisa refresh
+                if (string.IsNullOrEmpty(Session.RefreshToken))
+                {
+                    System.Diagnostics.Debug.WriteLine("❌ RefreshToken tidak tersedia, tidak dapat refresh");
+                    return false;
+                }
+
+                // Buat request body
+                var refreshRequest = new { refreshToken = Session.RefreshToken };
+                string jsonString = JsonConvert.SerializeObject(refreshRequest);
+                var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+
+                // Hubungi /auth/refresh endpoint (tanpa Bearer token)
+                Client.DefaultRequestHeaders.Remove("Authorization");
+                string url = $"{ActiveBaseUrl}/auth/refresh";
+                HttpResponseMessage response = await Client.PostAsync(url, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeObject<dynamic>(responseBody);
+
+                    // Extract accessToken dari response
+                    string newAccessToken = result["accessToken"]?.ToString() ?? result["access_token"]?.ToString();
+
+                    if (string.IsNullOrEmpty(newAccessToken))
+                    {
+                        System.Diagnostics.Debug.WriteLine("❌ Response tidak mengandung accessToken");
+                        return false;
+                    }
+
+                    // Update Session.Token dengan token baru
+                    Session.Token = newAccessToken;
+                    System.Diagnostics.Debug.WriteLine("✅ Token berhasil di-refresh");
+                    return true;
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"❌ Token refresh gagal dengan status: {response.StatusCode}");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"❌ Error saat refresh token: {ex.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// ✅ NEW: Wrapper untuk GET request dengan auto-retry on 401
+        /// PUBLIC sehingga bisa digunakan oleh Form/UserControl lain
+        /// </summary>
+        public static async Task<HttpResponseMessage> GetWithRetry(string url)
+        {
+            AddBearerTokenHeader();
+            HttpResponseMessage response = await Client.GetAsync(url);
+
+            // Jika 401, coba refresh token dan ulangi request
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                bool refreshSuccess = await RefreshTokenAsync();
+                if (refreshSuccess)
+                {
+                    AddBearerTokenHeader();
+                    response = await Client.GetAsync(url);
+                }
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// ✅ NEW: Wrapper untuk PUT request dengan auto-retry on 401
+        /// PUBLIC sehingga bisa digunakan oleh Form/UserControl lain
+        /// </summary>
+        public static async Task<HttpResponseMessage> PutWithRetry(string url, HttpContent content = null)
+        {
+            AddBearerTokenHeader();
+            HttpResponseMessage response = await Client.PutAsync(url, content);
+
+            // Jika 401, coba refresh token dan ulangi request
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                bool refreshSuccess = await RefreshTokenAsync();
+                if (refreshSuccess)
+                {
+                    AddBearerTokenHeader();
+                    response = await Client.PutAsync(url, content);
+                }
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// ✅ NEW: Wrapper untuk POST request dengan auto-retry on 401
+        /// PUBLIC sehingga bisa digunakan oleh Form/UserControl lain
+        /// </summary>
+        public static async Task<HttpResponseMessage> PostWithRetry(string url, HttpContent content)
+        {
+            AddBearerTokenHeader();
+            HttpResponseMessage response = await Client.PostAsync(url, content);
+
+            // Jika 401, coba refresh token dan ulangi request
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                bool refreshSuccess = await RefreshTokenAsync();
+                if (refreshSuccess)
+                {
+                    AddBearerTokenHeader();
+                    response = await Client.PostAsync(url, content);
+                }
+            }
+
+            return response;
+        }
+
+        /// <summary>
         /// Get all payments from API
         /// Includes nested relations: Pemesanan (with Penyewa and Kamar)
         /// </summary>
@@ -39,8 +254,8 @@ namespace Kost_SiguraGura
         {
             try
             {
-                string url = $"{BaseUrl}/payments";
-                HttpResponseMessage response = await Client.GetAsync(url);
+                string url = $"{ActiveBaseUrl}/payments";
+                HttpResponseMessage response = await GetWithRetry(url);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -70,8 +285,8 @@ namespace Kost_SiguraGura
         {
             try
             {
-                string url = $"{BaseUrl}/payments/{paymentId}/confirm";
-                HttpResponseMessage response = await Client.PutAsync(url, null);
+                string url = $"{ActiveBaseUrl}/payments/{paymentId}/confirm";
+                HttpResponseMessage response = await PutWithRetry(url, null);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -99,8 +314,8 @@ namespace Kost_SiguraGura
         {
             try
             {
-                string url = $"{BaseUrl}/payments/{paymentId}/reject";
-                HttpResponseMessage response = await Client.PutAsync(url, null);
+                string url = $"{ActiveBaseUrl}/payments/{paymentId}/reject";
+                HttpResponseMessage response = await PutWithRetry(url, null);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -173,7 +388,7 @@ namespace Kost_SiguraGura
         {
             try
             {
-                string url = $"{BaseUrl}/tenants?page={page}&limit={limit}";
+                string url = $"{ActiveBaseUrl}/tenants?page={page}&limit={limit}";
 
                 if (!string.IsNullOrEmpty(search))
                     url += $"&search={Uri.EscapeDataString(search)}";
@@ -181,7 +396,7 @@ namespace Kost_SiguraGura
                 if (!string.IsNullOrEmpty(role))
                     url += $"&role={role}";
 
-                HttpResponseMessage response = await Client.GetAsync(url);
+                HttpResponseMessage response = await GetWithRetry(url);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -211,8 +426,8 @@ namespace Kost_SiguraGura
         {
             try
             {
-                string url = $"{BaseUrl}/tenants/{tenantId}/deactivate";
-                HttpResponseMessage response = await Client.PutAsync(url, null);
+                string url = $"{ActiveBaseUrl}/tenants/{tenantId}/deactivate";
+                HttpResponseMessage response = await PutWithRetry(url, null);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -240,8 +455,8 @@ namespace Kost_SiguraGura
         {
             try
             {
-                string url = $"{BaseUrl}/tenant-payments/{tenantId}";
-                HttpResponseMessage response = await Client.GetAsync(url);
+                string url = $"{ActiveBaseUrl}/tenant-payments/{tenantId}";
+                HttpResponseMessage response = await GetWithRetry(url);
 
                 if (response.IsSuccessStatusCode)
                 {

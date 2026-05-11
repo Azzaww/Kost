@@ -232,7 +232,8 @@ namespace Kost_SiguraGura
             try
             {
                 System.Diagnostics.Debug.WriteLine("[LoadDashboardStatsAsync] Starting dashboard stats fetch...");
-                var response = await ApiClient.Client.GetAsync("https://rahmatzaw.elarisnoir.my.id/api/dashboard/stats");
+                // ✅ FIX: Use ActiveBaseUrl dan GetWithRetry
+                var response = await ApiClient.GetWithRetry($"{ApiClient.ActiveBaseUrl}/dashboard/stats");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -283,7 +284,8 @@ namespace Kost_SiguraGura
             try
             {
                 System.Diagnostics.Debug.WriteLine($"[LoadPaymentsAsync] Starting payment data fetch...");
-                var response = await ApiClient.Client.GetAsync("https://rahmatzaw.elarisnoir.my.id/api/payments");
+                // ✅ FIX: Use ActiveBaseUrl dan GetWithRetry
+                var response = await ApiClient.GetWithRetry($"{ApiClient.ActiveBaseUrl}/payments");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -650,11 +652,25 @@ namespace Kost_SiguraGura
                     .ToList();
 
                 var confirmedPayments = filteredPayments
-                    .Where(p => p.StatusPembayaran == "Confirmed" || p.StatusPembayaran == "confirmed")
+                    .Where(p => p.StatusPembayaran != null && 
+                       (p.StatusPembayaran.Equals("Confirmed", StringComparison.OrdinalIgnoreCase) ||
+                        p.StatusPembayaran.Equals("Verified", StringComparison.OrdinalIgnoreCase)))
                     .ToList();
 
+                // If no confirmed payments, include all non-cancelled/non-rejected payments
+                if (confirmedPayments.Count == 0)
+                {
+                    confirmedPayments = filteredPayments
+                        .Where(p => p.StatusPembayaran != null && 
+                           !p.StatusPembayaran.Equals("Cancelled", StringComparison.OrdinalIgnoreCase) &&
+                           !p.StatusPembayaran.Equals("Rejected", StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+                }
+
                 var pendingPayments = filteredPayments
-                    .Where(p => p.StatusPembayaran == "Pending" || p.StatusPembayaran == "pending")
+                    .Where(p => p.StatusPembayaran != null &&
+                       (p.StatusPembayaran.Equals("Pending", StringComparison.OrdinalIgnoreCase) ||
+                        p.StatusPembayaran.Equals("Ditunda", StringComparison.OrdinalIgnoreCase)))
                     .ToList();
 
                 decimal totalRevenue = confirmedPayments.Sum(p => p.JumlahBayar);
@@ -672,7 +688,13 @@ namespace Kost_SiguraGura
                         decimal avgRate = allRooms.Count > 0 ? allRooms.Average(r => r.PRICE) : 0;
                         guna2HtmlLabel16.Text = FormatCurrency(avgRate);
 
-                        var occupiedRooms = allRooms.Where(r => r.STATUS == "Penuh" || r.STATUS == "Full").Count();
+                        var occupiedRooms = allRooms
+                            .Where(r => r.STATUS != null && 
+                               (r.STATUS.Equals("Penuh", StringComparison.OrdinalIgnoreCase) ||
+                                r.STATUS.Equals("Full", StringComparison.OrdinalIgnoreCase) ||
+                                r.STATUS.Equals("Terpesan", StringComparison.OrdinalIgnoreCase) ||
+                                r.STATUS.Equals("Booked", StringComparison.OrdinalIgnoreCase)))
+                            .Count();
                         var totalRooms = allRooms.Count;
                         double occupancyRate = totalRooms > 0 ? (occupiedRooms / (double)totalRooms) * 100 : 0;
                         guna2HtmlLabel15.Text = $"{occupancyRate:F1} %";
